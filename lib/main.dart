@@ -5,7 +5,9 @@ import 'package:app_my_diary/screens/AuthScreens/LoginScreen.dart';
 import 'package:app_my_diary/screens/AuthScreens/RegisterScreen.dart';
 import 'package:app_my_diary/screens/SplashScreen.dart';
 
-
+void main() {
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),
-        '/login': (context) => LoginScreen(), 
+        '/login': (context) => LoginScreen(),
         '/register': (context) => RegisterScreen(),
         '/homepage': (context) => HomePageScreen(),
       },

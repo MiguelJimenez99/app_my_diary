@@ -93,9 +93,9 @@ class _GalleryScreenState extends State<GalleryScreen> {
                               itemBuilder: (context, index) {
                                 final photo = photos[index];
 
-                                if (photo.photo.isEmpty ||
+                                if (photo.url.isEmpty ||
                                     !Uri.tryParse(
-                                          photo.photo,
+                                          photo.url,
                                         )!.hasAbsolutePath ==
                                         true) {
                                   // Mostrar imagen por defecto o un placeholder
@@ -129,7 +129,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8),
                                     child: Image.network(
-                                      photo.photo,
+                                      photo.url,
                                       fit: BoxFit.cover,
                                       loadingBuilder: (
                                         context,

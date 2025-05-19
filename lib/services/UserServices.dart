@@ -6,7 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class UserService {
   //https://back-my-diary-v2.onrender.com
-  final String baseUrl = 'https://back-my-diary-v2.onrender.com';
+  final String baseUrl = 'http://192.168.1.42:3000';
 
   Future<User> getDataUser() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();

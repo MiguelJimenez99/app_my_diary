@@ -10,32 +10,32 @@ String photoToJson(Photo data) => json.encode(data.toJson());
 
 class Photo {
   String id;
-  String photo;
-  String title;
   String description;
+  String url;
+  String cloudinaryId;
   String createdAt;
 
   Photo({
     required this.id,
-    required this.photo,
-    required this.title,
     required this.description,
+    required this.url,
+    required this.cloudinaryId,
     required this.createdAt,
   });
 
   factory Photo.fromJson(Map<String, dynamic> json) => Photo(
     id: json["_id"] ?? '',
-    photo: json["photo"] ?? '',
-    title: json["title"] ?? '',
     description: json["description"] ?? '',
+    url: json["url"] ?? '',
+    cloudinaryId: json["cloudinaryId"] ?? '',
     createdAt: json["createdAt"] ?? '',
   );
 
   Map<String, dynamic> toJson() => {
     "id": id,
-    "url": photo,
-    "title": title,
     "description": description,
+    "url": url,
+    "cloudinaryId": cloudinaryId,
     "createdAt": createdAt,
   };
 }
