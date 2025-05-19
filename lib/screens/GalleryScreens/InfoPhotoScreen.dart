@@ -54,7 +54,7 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
 
   void _sharePhoto() {
     // ignore: deprecated_member_use
-    Share.share(_photos[_currentIndex].photo);
+    photoService.SharePhotoFromUrl(_photos[_currentIndex].url);
   }
 
   void _delPhoto() async {
@@ -67,7 +67,7 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: Text("Cancelar"),
+                child: Text('Cancelar'),
               ),
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
@@ -121,7 +121,7 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.only(left: 5, right: 5),
-                        child: Image.network(photo.photo),
+                        child: Image.network(photo.url),
                       ),
                     ),
                   );
@@ -159,7 +159,7 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
                 padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Container(
                   decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white),
+                    border: Border.all(color: Colors.white, width: 2),
                     borderRadius: BorderRadius.circular(50),
                     // boxShadow: [
                     //   BoxShadow(
@@ -179,7 +179,7 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
                       ),
                       IconButton(
                         onPressed: _delPhoto,
-                        icon: Icon(Icons.delete, color: Colors.redAccent),
+                        icon: Icon(Icons.delete, color: Colors.white),
                       ),
                     ],
                   ),

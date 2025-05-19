@@ -55,6 +55,7 @@ class PhotoService {
   Future<void> postPhotoUser({
     required XFile imageFile,
     String? description,
+
   }) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -124,35 +125,35 @@ class PhotoService {
     }
   }
 
-  // // Funcion para compartir la foto en formato imagen
+  // Funcion para compartir la foto en formato imagen
 
-  // Future<void> SharePhotoFromUrl(String url) async {
-  //   try {
-  //     // 1- descargo la imagen
-  //     final response = await http.get(Uri.parse(url));
-  //     if (response.statusCode != 200) {
-  //       throw Exception('Error al descargar imagen');
-  //     }
+  Future<void> SharePhotoFromUrl(String url) async {
+    try {
+      // 1- descargo la imagen
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode != 200) {
+        throw Exception('Error al descargar imagen');
+      }
 
-  //     // 2- obtengo directorio temporal
+      // 2- obtengo directorio temporal
 
-  //     final temDir = await getTemporaryDirectory();
+      final temDir = await getTemporaryDirectory();
 
-  //     if (!(await temDir.exists())) {
-  //       await temDir.create(recursive: true);
-  //     }
+      if (!(await temDir.exists())) {
+        await temDir.create(recursive: true);
+      }
 
-  //     // Crear archivo temporal
-  //     final filePath =
-  //         '${temDir.path}/shared_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
-  //     final file = File(filePath);
+      // Crear archivo temporal
+      final filePath =
+          '${temDir.path}/shared_image_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      final file = File(filePath);
 
-  //     await file.writeAsBytes(response.bodyBytes);
+      await file.writeAsBytes(response.bodyBytes);
 
-  //     // Compartir usando share_plus
-  //     await Share.shareXFiles([XFile(file.path)], text: '¡Mira esta foto!');
-  //   } catch (e) {
-  //     throw Exception('Error al compartir la imagen: $e');
-  //   }
-  // }
+      // Compartir usando share_plus
+      await Share.shareXFiles([XFile(file.path)], text: '¡Mira esta foto!');
+    } catch (e) {
+      throw Exception('Error al compartir la imagen: $e');
+    }
+  }
 }
