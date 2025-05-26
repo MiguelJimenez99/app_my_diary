@@ -5,6 +5,7 @@ import 'package:app_my_diary/screens/DiaryScreen/EditDiaryScreen.dart';
 import 'package:app_my_diary/screens/DiaryScreen/InfoDiaryScreen.dart';
 import 'package:app_my_diary/services/DiaryService.dart';
 import 'package:app_my_diary/services/UserServices.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DiaryScreen extends StatefulWidget {
   const DiaryScreen({super.key});
@@ -35,7 +36,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Container(
-        decoration: BoxDecoration(color: Color(0xFF0F172A)),
+        decoration: BoxDecoration(color: Color.fromRGBO(251, 248, 246, 1)),
         child: Stack(
           children: [
             SingleChildScrollView(
@@ -47,16 +48,20 @@ class _DiaryScreenState extends State<DiaryScreen> {
                       padding: const EdgeInsets.only(left: 30),
                       child: Text(
                         'Mi Diario',
-                        style: TextStyle(color: Colors.white, fontSize: 35),
+                        style: GoogleFonts.lato(
+                          color: Colors.black,
+                          fontSize: 35,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ),
                   Divider(),
                   Container(
-                    height: 670.5,
+                    height: MediaQuery.of(context).size.height - 170,
                     decoration: BoxDecoration(),
                     child: Material(
-                      color: Color(0xFF0F172A),
+                      color: Color.fromRGBO(251, 248, 246, 1),
                       child: FutureBuilder<List<Diary>>(
                         future: _futureActivities,
                         builder: (context, snapshot) {
@@ -78,9 +83,9 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                 final activity = activities[index];
                                 return Padding(
                                   padding: EdgeInsets.only(
-                                    top: 20,
-                                    left: 30,
-                                    right: 30,
+                                    top: 10,
+                                    left: 10,
+                                    right: 10,
                                   ),
                                   child: GestureDetector(
                                     onTap: () {
@@ -95,7 +100,8 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                       );
                                     },
                                     child: Card(
-                                      color: Color.fromRGBO(36, 40, 56, 1),
+                                      elevation: 5,
+                                      color: Color.fromRGBO(210, 224, 238, 1),
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
@@ -107,21 +113,24 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                             ),
                                             child: Text(
                                               activity.date.substring(0, 10),
-                                              style: TextStyle(
-                                                color: Colors.grey,
+                                              style: GoogleFonts.lato(
+                                                color: Colors.black,
+                                                fontSize: 15,
+                                                fontWeight: FontWeight.w600,
                                               ),
                                             ),
                                           ),
+
                                           Padding(
                                             padding: const EdgeInsets.only(
                                               left: 20,
                                             ),
                                             child: Text(
                                               activity.title,
-                                              style: TextStyle(
-                                                color: Colors.white,
+                                              style: GoogleFonts.lato(
+                                                color: Colors.black,
                                                 fontSize: 20,
-                                                fontWeight: FontWeight.bold,
+                                                fontWeight: FontWeight.w600,
                                               ),
                                             ),
                                           ),
@@ -133,12 +142,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                             child: Container(
                                               padding: EdgeInsets.all(8.0),
                                               decoration: BoxDecoration(
-                                                color: Color.fromRGBO(
-                                                  59,
-                                                  58,
-                                                  97,
-                                                  1,
-                                                ),
+                                                color: Colors.grey[800],
                                                 borderRadius:
                                                     BorderRadius.circular(100),
                                               ),
@@ -166,8 +170,11 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                                     overflow:
                                                         TextOverflow.ellipsis,
                                                     maxLines: 2,
-                                                    style: const TextStyle(
-                                                      color: Colors.white,
+                                                    style: GoogleFonts.lato(
+                                                      color: Colors.black,
+                                                      fontSize: 15,
+                                                      fontWeight:
+                                                          FontWeight.w400,
                                                     ),
                                                   ),
                                                 ),
@@ -329,11 +336,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                 padding: const EdgeInsets.only(top: 25, right: 10, bottom: 30),
                 child: Container(
                   decoration: BoxDecoration(
-                    color: Color.fromRGBO(53, 49, 149, 1),
+                    color: Colors.grey[800],
                     borderRadius: BorderRadius.circular(100),
                   ),
                   child: IconButton(
-                    
                     onPressed: () async {
                       final userId = await userService.getDataUser();
 
