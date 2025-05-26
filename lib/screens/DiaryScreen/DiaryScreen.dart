@@ -56,6 +56,17 @@ class _DiaryScreenState extends State<DiaryScreen> {
                       ),
                     ),
                   ),
+
+                  Padding(
+                    padding: const EdgeInsets.only(left: 30),
+                    child: Text(
+                      'Mis pensamientos mas secretos',
+                      style: GoogleFonts.lato(
+                        color: Colors.blueGrey,
+                        fontSize: 17,
+                      ),
+                    ),
+                  ),
                   Divider(),
                   Container(
                     height: MediaQuery.of(context).size.height - 170,

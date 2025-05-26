@@ -36,11 +36,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
       child: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFFe0eafc), Color(0xFFcfdef3)],
-          ),
+          color: Color.fromRGBO(251, 248, 246, 1),
         ),
         child: Stack(
           children: [
@@ -168,7 +164,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
               bottom: 30,
               right: 30,
               child: FloatingActionButton(
-                backgroundColor: const Color(0xFF355195),
+                backgroundColor: Colors.grey[800],
                 elevation: 8,
                 onPressed: () async {
                   final result = await Navigator.push(
@@ -280,9 +276,28 @@ class ModernPhotoCard extends StatelessWidget {
                         color: Colors.white,
                         size: 18,
                       ),
-                      photo.description.isNotEmpty
-                          ? Text(photo.description)
-                          : Text(''),
+                      SizedBox(width: 5),
+                      SizedBox(
+                        width: 80,
+                        child:
+                            photo.description.isNotEmpty
+                                ? Text(
+                                  overflow: TextOverflow.ellipsis,
+                                  photo.description,
+                                  style: GoogleFonts.lato(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                )
+                                : Text(
+                                  overflow: TextOverflow.ellipsis,
+                                  photo.createdAt.substring(0, 10),
+                                  style: GoogleFonts.lato(
+                                    color: Colors.white,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                      ),
                     ],
                   ),
                 ),
