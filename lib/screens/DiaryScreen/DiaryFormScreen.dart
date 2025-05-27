@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app_my_diary/class/UserClass.dart';
 import 'package:app_my_diary/services/DiaryService.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class DiaryFormScreen extends StatefulWidget {
   const DiaryFormScreen({super.key, required this.user});
@@ -67,7 +68,7 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
         });
 
         await Future.delayed(Duration(seconds: 1));
-        
+
         Navigator.pop(context, true);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -87,209 +88,206 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(251, 248, 246, 1),
       appBar: AppBar(
-        foregroundColor: Colors.white,
-        backgroundColor: Color(0xFF0F172A),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.blueGrey,
+        title: Text(
+          'Nueva Entrada',
+          style: GoogleFonts.lato(
+            color: Colors.blueGrey,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
       ),
-      backgroundColor: Color(0xFF0F172A),
-      body: SafeArea(
-        child: Material(
-          color: Color(0xFF0F172A),
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 30),
-                    child: Text(
-                      'Nueva Entrada',
-                      style: TextStyle(color: Colors.white, fontSize: 35),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+            decoration: BoxDecoration(
+              color: Color.fromRGBO(210, 224, 238, 1).withOpacity(0.97),
+              borderRadius: BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.10),
+                  blurRadius: 18,
+                  offset: const Offset(0, 8),
+                ),
+              ],
+            ),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Nueva Entrada',
+                    style: GoogleFonts.lato(
+                      color: Colors.blueGrey[800],
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.1,
                     ),
                   ),
-                ),
-                SizedBox(height: 20),
-                Form(
-                  key: _formKey,
-                  child: Column(
+                  const SizedBox(height: 24),
+                  TextFormField(
+                    controller: _controllerTitle,
+                    style: GoogleFonts.lato(
+                      color: Colors.blueGrey[900],
+                      fontWeight: FontWeight.w600,
+                    ),
+                    decoration: InputDecoration(
+                      labelText: 'Título',
+                      labelStyle: GoogleFonts.lato(color: Colors.blueGrey[400]),
+                      prefixIcon: Icon(
+                        Icons.title,
+                        color: Colors.blueGrey[300],
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    validator:
+                        (value) =>
+                            value == null || value.isEmpty
+                                ? 'No se pueden enviar campos vacíos'
+                                : null,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _controllerDescription,
+                    maxLines: 4,
+                    style: GoogleFonts.lato(color: Colors.blueGrey[900]),
+                    decoration: InputDecoration(
+                      labelText: 'Descripción',
+                      labelStyle: GoogleFonts.lato(color: Colors.blueGrey[400]),
+                      prefixIcon: Icon(
+                        Icons.description,
+                        color: Colors.blueGrey[300],
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      alignLabelWithHint: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    validator:
+                        (value) =>
+                            value == null || value.isEmpty
+                                ? 'No se pueden enviar campos vacíos'
+                                : null,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _controllerMood,
+                    style: GoogleFonts.lato(color: Colors.blueGrey[900]),
+                    decoration: InputDecoration(
+                      labelText: 'Estado de ánimo',
+                      labelStyle: GoogleFonts.lato(color: Colors.blueGrey[400]),
+                      prefixIcon: Icon(
+                        Icons.emoji_emotions,
+                        color: Colors.blueGrey[300],
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    validator:
+                        (value) =>
+                            value == null || value.isEmpty
+                                ? 'No se pueden enviar campos vacíos'
+                                : null,
+                  ),
+                  const SizedBox(height: 16),
+                  TextFormField(
+                    controller: _controllerDate,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor ingrese la fecha';
+                      }
+                      return null;
+                    },
+                    readOnly: true,
+                    style: GoogleFonts.lato(color: Colors.blueGrey[900]),
+                    decoration: InputDecoration(
+                      labelText: "Fecha",
+                      labelStyle: GoogleFonts.lato(color: Colors.blueGrey[400]),
+                      prefixIcon: Icon(
+                        Icons.calendar_today,
+                        color: Colors.blueGrey[300],
+                      ),
+                      filled: true,
+                      fillColor: Colors.grey[100],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                      suffixIcon: Icon(
+                        Icons.edit_calendar,
+                        color: Colors.blueGrey[300],
+                      ),
+                    ),
+                    onTap: () => _selectDate(context),
+                  ),
+                  const SizedBox(height: 28),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30),
-                          child: Text(
-                            'Titulo',
-                            style: TextStyle(color: Colors.grey, fontSize: 20),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 30,
-                          right: 30,
-                          top: 10,
-                          bottom: 20,
-                        ),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                          style: TextStyle(color: Colors.white),
-                          controller: _controllerTitle,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'No se pueden enviar campos vacios';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30),
-                          child: Text(
-                            'Descripción',
-                            style: TextStyle(color: Colors.grey, fontSize: 20),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 30,
-                          right: 30,
-                          top: 10,
-                        ),
-                        child: TextFormField(
-                          maxLines: 4,
-                          decoration: InputDecoration(
-                            labelText: 'Escribe tu historia...',
-                            border: OutlineInputBorder(),
-                          ),
-                          style: TextStyle(color: Colors.white),
-                          controller: _controllerDescription,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'No se pueden enviar campos vacios';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30, top: 20),
-                          child: Text(
-                            'Estado de ánimo',
-                            style: TextStyle(color: Colors.grey, fontSize: 20),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 30,
-                          right: 30,
-                          top: 10,
-                        ),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                          ),
-                          style: TextStyle(color: Colors.white),
-                          controller: _controllerMood,
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'No se pueden enviar campos vacios';
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30, top: 20),
-                          child: Text(
-                            'Fecha',
-                            style: TextStyle(color: Colors.grey, fontSize: 20),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 30,
-                          right: 30,
-                          top: 10,
-                        ),
-                        child: TextFormField(
-                          controller: _controllerDate,
-                          readOnly: true,
-                          decoration: InputDecoration(
-                            labelText: "Selecciona una fecha",
-                            suffixIcon: Icon(Icons.calendar_today),
-                            border: OutlineInputBorder(),
-                          ),
-                          style: TextStyle(color: Colors.white),
-                          onTap: () => _selectDate(context),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 30,
-                          right: 30,
-                          top: 30,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            SizedBox(
-                              width: 150,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color(0xFF0F172A),
-                                  elevation: 10,
-                                  side: BorderSide(color: Colors.grey),
-                                ),
-                                onPressed: () => {Navigator.pop(context)},
-                                child: Text(
-                                  'Cancelar',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ),
+                      Expanded(
+                        child: OutlinedButton.icon(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.blueGrey,
+                            side: BorderSide(color: Colors.blueGrey),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
                             ),
-                            SizedBox(
-                              width: 150,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Color.fromRGBO(
-                                    53,
-                                    49,
-                                    149,
-                                    1,
-                                  ),
-                                  elevation: 10,
-                                ),
-                                onPressed: _saveDiaryPost,
-                                child: Text(
-                                  'Guardar',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 17,
-                                  ),
-                                ),
-                              ),
+                            padding: EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          icon: Icon(Icons.close),
+                          label: Text(
+                            'Cancelar',
+                            style: GoogleFonts.lato(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueGrey,
+                            elevation: 8,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
                             ),
-                          ],
+                            padding: EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          onPressed: _saveDiaryPost,
+                          icon: Icon(Icons.save, color: Colors.white),
+                          label: Text(
+                            'Guardar',
+                            style: GoogleFonts.lato(
+                              fontSize: 16,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),

@@ -20,7 +20,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     _refresScreen();
   }
 
-   void _refresScreen() {
+  void _refresScreen() {
     setState(() {
       final _dataUser = userService.getDataUser();
     });
@@ -32,8 +32,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     Navigator.pushReplacementNamed(context, '/login');
   }
-
- 
 
   @override
   Widget build(BuildContext context) {

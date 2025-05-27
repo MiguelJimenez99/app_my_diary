@@ -6,7 +6,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DiaryServices {
   //https://back-my-diary-v2.onrender.com
-  static String baseUrl = 'https://back-my-diary-v2.onrender.com';
+  //http://192.168.1.42:3000
+  static String baseUrl = 'http://192.168.1.42:3000';
 
   List<Diary> _activities = [];
 
@@ -29,6 +30,11 @@ class DiaryServices {
 
         final diariesList = data['posts'] as List;
         _activities = diariesList.map((item) => Diary.fromJson(item)).toList();
+
+        // DEBUG: Mostrar fechas para comprobar el orden
+        for (var d in _activities) {
+          print('Fecha: ${d.date}');
+        }
 
         return _activities;
       } else {

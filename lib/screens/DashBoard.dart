@@ -26,22 +26,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   Photo? _photo;
   Diary? _diary;
 
-  Widget shimmeringEffect({
-    required double width,
-    required double height,
-    required BorderRadius borderRadius,
-  }) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        color: Colors.grey.shade300,
-        borderRadius: borderRadius,
-      ),
-      child: const SizedBox(),
-    );
-  }
-
   @override
   void initState() {
     // TODO: implement initState
@@ -108,49 +92,56 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _user == null
-                    ? shimmeringEffect(
-                      width: 300,
-                      height: 40,
-                      borderRadius: BorderRadius.circular(20),
+                    ? Container(
+                      width: 180,
+                      height: 32,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     )
                     : Text(
                       'Hola, ${_user!.name}!',
                       style: GoogleFonts.lato(
                         textStyle: TextStyle(
-                          color: Colors.black,
-                          fontSize: 35,
+                          color: Colors.blueGrey[800],
+                          fontSize: 32,
                           fontWeight: FontWeight.bold,
+                          letterSpacing: 1.1,
                         ),
                       ),
                     ),
-
+                const SizedBox(height: 4),
                 Center(
                   child: Text(
-                    '¿Como te sientes hoy?',
+                    '¿Cómo te sientes hoy?',
                     style: GoogleFonts.lato(
-                      textStyle: TextStyle(color: Colors.grey, fontSize: 25),
+                      textStyle: TextStyle(
+                        color: Colors.blueGrey[400],
+                        fontSize: 22,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: Divider(),
+                  padding: const EdgeInsets.only(right: 20, top: 10),
+                  child: Divider(thickness: 1.2, color: Colors.blueGrey[100]),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(right: 20, top: 20),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
+                      // Tarjeta de Última Nota
                       GestureDetector(
                         onTap: () async {
                           Diary entranceDiary;
-
                           final diaryProvider = Provider.of<DiaryProvider>(
                             context,
                             listen: false,
                           );
                           await diaryProvider.fetchDiary();
-
                           entranceDiary = diaryProvider.diary!.first;
                           Navigator.push(
                             context,
@@ -163,92 +154,90 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                         },
                         child: Container(
                           width: 180,
-                          height: 170,
+                          height: 180,
                           decoration: BoxDecoration(
                             color: Colors.white,
+                            borderRadius: BorderRadius.circular(24),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(
-                                  0,
-                                  3,
-                                ), // changes position of shadow
+                                color: Colors.blueGrey.withOpacity(0.10),
+                                blurRadius: 16,
+                                offset: Offset(0, 8),
                               ),
                             ],
-                            borderRadius: BorderRadius.circular(20),
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 10, left: 10),
+                            padding: const EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.book, color: Colors.black54),
-                                      SizedBox(width: 10),
-                                      Text(
-                                        'Ultimo diario',
-                                        style: GoogleFonts.lato(
-                                          textStyle: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 17,
-                                          ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.book,
+                                      color: Colors.blueGrey[400],
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      'Última nota',
+                                      style: GoogleFonts.lato(
+                                        textStyle: TextStyle(
+                                          color: Colors.blueGrey[400],
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
-
                                 Padding(
-                                  padding: EdgeInsets.only(right: 10),
-                                  child: Divider(),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 6,
+                                  ),
+                                  child: Divider(color: Colors.blueGrey[100]),
                                 ),
                                 _diary == null
-                                    ? Center(
-                                      child: shimmeringEffect(
-                                        width: 100,
-                                        height: 20,
+                                    ? Container(
+                                      width: 100,
+                                      height: 20,
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[300],
                                         borderRadius: BorderRadius.circular(10),
                                       ),
                                     )
                                     : Text(
                                       _diary!.title,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                       style: GoogleFonts.lato(
                                         textStyle: TextStyle(
-                                          color: Colors.black,
+                                          color: Colors.blueGrey[900],
                                           fontWeight: FontWeight.w800,
-                                          fontSize: 22,
+                                          fontSize: 20,
                                         ),
                                       ),
                                     ),
-
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 10,
-                                    left: 10,
-                                    right: 10,
-                                  ),
+                                const SizedBox(height: 6),
+                                Flexible(
                                   child:
                                       _diary == null
-                                          ? shimmeringEffect(
+                                          ? Container(
                                             width: 100,
                                             height: 20,
-                                            borderRadius: BorderRadius.circular(
-                                              10,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[300],
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
                                           )
                                           : Text(
                                             _diary!.description,
                                             maxLines: 3,
+                                            overflow: TextOverflow.ellipsis,
                                             style: GoogleFonts.lato(
                                               textStyle: TextStyle(
-                                                color: Colors.black,
-                                                overflow: TextOverflow.ellipsis,
-                                                fontSize: 17,
+                                                color: Colors.blueGrey[800],
+                                                fontSize: 15,
                                               ),
                                             ),
                                           ),
@@ -258,82 +247,96 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                           ),
                         ),
                       ),
+                      // Tarjeta de Último Recuerdo
                       InkWell(
                         onTap: () {},
                         child: Container(
                           width: 180,
-                          height: 170,
+                          height: 180,
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(24),
+                            color: Color.fromRGBO(219, 225, 231, 1),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.grey.withOpacity(0.2),
-                                spreadRadius: 2,
-                                blurRadius: 5,
-                                offset: Offset(
-                                  0,
-                                  3,
-                                ), // changes position of shadow
+                                color: Colors.blueGrey.withOpacity(0.10),
+                                blurRadius: 16,
+                                offset: Offset(0, 8),
                               ),
                             ],
                           ),
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 10, top: 10),
+                            padding: const EdgeInsets.all(16),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding: const EdgeInsets.only(top: 10),
-                                  child: Row(
-                                    children: [
-                                      Icon(Icons.photo, color: Colors.black54),
-                                      SizedBox(width: 10),
-                                      Text(
-                                        'Ultimo recuerdo',
-                                        style: GoogleFonts.lato(
-                                          textStyle: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 17,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(right: 10),
-                                  child: Divider(),
-                                ),
-                                _photo == null
-                                    ? shimmeringEffect(
-                                      width: 100,
-                                      height: 30,
-                                      borderRadius: BorderRadius.circular(20),
-                                    )
-                                    : Center(
-                                      child: SizedBox(
-                                        width: double.infinity,
-                                        height: 100,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            right: 10,
-                                          ),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                              image: DecorationImage(
-                                                image: NetworkImage(
-                                                  _photo!.url,
-                                                ),
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.photo,
+                                      color: Colors.blueGrey[400],
+                                    ),
+                                    SizedBox(width: 10),
+                                    Text(
+                                      'Último recuerdo',
+                                      style: GoogleFonts.lato(
+                                        textStyle: TextStyle(
+                                          color: Colors.blueGrey[400],
+                                          fontSize: 17,
+                                          fontWeight: FontWeight.w600,
                                         ),
                                       ),
                                     ),
+                                  ],
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 6,
+                                  ),
+                                  child: Divider(color: Colors.blueGrey[100]),
+                                ),
+                                Expanded(
+                                  child:
+                                      _photo == null
+                                          ? Container(
+                                            width: double.infinity,
+                                            height: 90,
+                                            decoration: BoxDecoration(
+                                              color: Colors.grey[300],
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                            child: Icon(
+                                              Icons.image,
+                                              color: Colors.blueGrey[200],
+                                              size: 40,
+                                            ),
+                                          )
+                                          : ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                              16,
+                                            ),
+                                            child: Image.network(
+                                              _photo!.url,
+                                              width: double.infinity,
+                                              height: 90,
+                                              fit: BoxFit.cover,
+                                              errorBuilder:
+                                                  (
+                                                    context,
+                                                    error,
+                                                    stackTrace,
+                                                  ) => Container(
+                                                    color: Colors.grey[300],
+                                                    child: Icon(
+                                                      Icons.broken_image,
+                                                      color:
+                                                          Colors.blueGrey[200],
+                                                      size: 40,
+                                                    ),
+                                                  ),
+                                            ),
+                                          ),
+                                ),
                               ],
                             ),
                           ),
@@ -345,9 +348,8 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
               ],
             ),
           ),
-
           Padding(
-            padding: const EdgeInsets.only(top: 290, left: 30, right: 30),
+            padding: const EdgeInsets.only(top: 280, left: 30, right: 30),
             child: Container(
               width: double.infinity,
               height: 160,
@@ -508,4 +510,3 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     );
   }
 }
- 

@@ -5,6 +5,7 @@ import 'package:app_my_diary/class/PhotoClass.dart';
 import 'package:app_my_diary/services/PhotoService.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class InfoPhotoScreen extends StatefulWidget {
   const InfoPhotoScreen({
@@ -101,90 +102,166 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color.fromRGBO(251, 248, 246, 1),
       appBar: AppBar(
-        foregroundColor: Colors.white,
-        backgroundColor: Color(0xFF0F172A),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        foregroundColor: Colors.blueGrey,
+        title: Text(
+          'Detalle de Recuerdo',
+          style: GoogleFonts.lato(
+            color: Colors.blueGrey,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
       ),
-      backgroundColor: Color(0xFF0F172A),
       body: SafeArea(
         child: Stack(
           children: [
-            SizedBox(
+            Container(
               width: double.infinity,
               height: double.infinity,
-              child: PageView.builder(
-                controller: _controller,
-                itemCount: widget.photos.length,
-                itemBuilder: (context, index) {
-                  final photo = widget.photos[index];
-                  return InteractiveViewer(
-                    child: Center(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 5, right: 5),
-                        child: Image.network(photo.url),
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(bottom: 90),
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: SmoothPageIndicator(
-                  controller: _controller,
-                  count: widget.photos.length,
-                  effect: SwapEffect(
-                    dotColor: Colors.white24,
-                    activeDotColor: Colors.white,
-                    dotHeight: 10,
-                    dotWidth: 10,
-                  ),
-                  onDotClicked: (index) {
-                    _controller.animateToPage(
-                      index,
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeInOut,
-                    );
-                  },
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color.fromRGBO(210, 224, 238, 0.7),
+                    Color.fromRGBO(251, 248, 246, 1),
+                  ],
                 ),
               ),
             ),
-            Positioned(
-              bottom: 20,
-              left: 0,
-              right: 0,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Container(
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.white, width: 2),
-                    borderRadius: BorderRadius.circular(50),
-                    // boxShadow: [
-                    //   BoxShadow(
-                    //     color: Colors.white,
-                    //     spreadRadius: 1,
-                    //     blurRadius: 10,
-                    //     offset: Offset(10, 10),
-                    //   ),
-                    // ],
+            Column(
+              children: [
+                Expanded(
+                  child: PageView.builder(
+                    controller: _controller,
+                    itemCount: _photos.length,
+                    itemBuilder: (context, index) {
+                      final photo = _photos[index];
+                      return Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 16,
+                          ),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(24),
+                            child: Container(
+                              color: Colors.grey[100],
+                              child: InteractiveViewer(
+                                child: Image.network(
+                                  photo.url,
+                                  fit: BoxFit.contain,
+                                  loadingBuilder: (context, child, progress) {
+                                    if (progress == null) return child;
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        value:
+                                            progress.expectedTotalBytes != null
+                                                ? progress
+                                                        .cumulativeBytesLoaded /
+                                                    progress.expectedTotalBytes!
+                                                : null,
+                                        color: Colors.blueGrey,
+                                      ),
+                                    );
+                                  },
+                                  errorBuilder:
+                                      (context, error, stackTrace) => Container(
+                                        color: Colors.grey[300],
+                                        child: Icon(
+                                          Icons.broken_image,
+                                          color: Colors.blueGrey[200],
+                                          size: 60,
+                                        ),
+                                      ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      IconButton(
-                        onPressed: _sharePhoto,
-                        icon: Icon(Icons.share, color: Colors.white),
-                      ),
-                      IconButton(
-                        onPressed: _delPhoto,
-                        icon: Icon(Icons.delete, color: Colors.white),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 16),
+                  child: SmoothPageIndicator(
+                    controller: _controller,
+                    count: _photos.length,
+                    effect: SwapEffect(
+                      dotColor: Colors.blueGrey[100]!,
+                      activeDotColor: Colors.blueGrey,
+                      dotHeight: 10,
+                      dotWidth: 10,
+                    ),
+                    onDotClicked: (index) {
+                      _controller.animateToPage(
+                        index,
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.only(
+                    bottom: 24,
+                    left: 24,
+                    right: 24,
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 18,
+                    vertical: 10,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white.withOpacity(0.95),
+                    borderRadius: BorderRadius.circular(18),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.blueGrey.withOpacity(0.08),
+                        blurRadius: 12,
+                        offset: Offset(0, 6),
                       ),
                     ],
                   ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        onPressed: _sharePhoto,
+                        icon: Icon(Icons.share, color: Colors.blueGrey[700]),
+                        tooltip: 'Compartir',
+                      ),
+                      IconButton(
+                        onPressed: _delPhoto,
+                        icon: Icon(Icons.delete, color: Colors.red[400]),
+                        tooltip: 'Eliminar',
+                      ),
+                      if (_photos[_currentIndex].description != null &&
+                          _photos[_currentIndex].description!.isNotEmpty)
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 12),
+                            child: Text(
+                              _photos[_currentIndex].description!,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.lato(
+                                color: Colors.blueGrey[800],
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
+              ],
             ),
           ],
         ),
