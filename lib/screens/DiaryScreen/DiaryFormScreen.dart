@@ -1,7 +1,10 @@
+import 'package:app_my_diary/class/DiaryClass.dart';
+import 'package:app_my_diary/providers/DiaryProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:app_my_diary/class/UserClass.dart';
 import 'package:app_my_diary/services/DiaryService.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class DiaryFormScreen extends StatefulWidget {
   const DiaryFormScreen({super.key, required this.user});
@@ -21,6 +24,8 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
   final TextEditingController _controllerMood = TextEditingController();
   final TextEditingController _controllerDate = TextEditingController();
   DateTime? _selectedDate;
+
+  late Diary _diary;
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -42,13 +47,21 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
   Future<void> _saveDiaryPost() async {
     if (_formKey.currentState!.validate()) {
       try {
-        await diaryServices.newPostActivity(
+        Provider.of<DiaryProvider>(context, listen: false).createEntryDiary(
           _controllerTitle.text.trim(),
           _controllerDescription.text.trim(),
           _controllerMood.text.trim(),
           _selectedDate!.toUtc().toIso8601String(),
           widget.user.id,
         );
+
+        // diaryServices.newPostActivity(
+        //   _controllerTitle.text.trim(),
+        //   _controllerDescription.text.trim(),
+        //   _controllerMood.text.trim(),
+        //   _selectedDate!.toUtc().toIso8601String(),
+        //   widget.user.id,
+        // );
 
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -66,10 +79,6 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
           _controllerMood.clear();
           _controllerDate.clear();
         });
-
-        await Future.delayed(Duration(seconds: 1));
-
-        Navigator.pop(context, true);
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(

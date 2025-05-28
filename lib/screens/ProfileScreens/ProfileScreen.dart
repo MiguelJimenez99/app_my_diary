@@ -3,6 +3,7 @@ import 'package:app_my_diary/class/UserClass.dart';
 import 'package:app_my_diary/screens/ProfileScreens/EditProfileScreen.dart';
 import 'package:app_my_diary/services/UserServices.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -22,7 +23,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   void _refresScreen() {
     setState(() {
-      final _dataUser = userService.getDataUser();
+      // Solo refresca el estado, no es necesario asignar nada aquí
     });
   }
 
@@ -38,224 +39,175 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return SafeArea(
       child: Container(
         width: double.infinity,
-        decoration: BoxDecoration(color: Color(0xFF0F172A)),
+        color: Color.fromRGBO(251, 248, 246, 1),
         child: FutureBuilder<User>(
           future: userService.getDataUser(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(child: CircularProgressIndicator());
+              return Center(
+                child: CircularProgressIndicator(color: Colors.blueGrey),
+              );
             } else if (snapshot.hasError) {
               return Center(
                 child: Text(
                   '${snapshot.error}',
-                  style: TextStyle(color: Colors.red),
+                  style: GoogleFonts.lato(color: Colors.red, fontSize: 18),
                 ),
               );
             } else if (snapshot.hasData) {
               final user = snapshot.data!;
-
-              return Column(
-                children: [
-                  CircleAvatar(radius: 50, child: Icon(Icons.person, size: 50)),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Text(
-                      user.name,
-                      style: TextStyle(color: Colors.white, fontSize: 20),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10, left: 100),
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(53, 49, 149, 1),
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Color.fromRGBO(210, 224, 238, 1),
+                      child: Icon(
+                        Icons.person,
+                        size: 60,
+                        color: Colors.blueGrey[700],
                       ),
-                      onPressed: () async {
-                        final userId = await userService.getDataUser();
-
-                        final result = await Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => EditProfileScreen(user: userId),
+                    ),
+                    const SizedBox(height: 18),
+                    Text(
+                      '${user.name} ${user.lastname}',
+                      style: GoogleFonts.lato(
+                        color: Colors.black,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.1,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      user.email,
+                      style: GoogleFonts.lato(
+                        color: Colors.blueGrey[200],
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 18),
+                    SizedBox(
+                      width: 140,
+                      height: 40,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey[700],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
                           ),
-                        );
-
-                        // Si se creó una nueva actividad, recarga la lista
-                        if (result == true) {
-                          setState(() {
-                            _refresScreen(); // vuelve a ejecutar el Future
-                          });
-                        }
-
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder:
-                        //         (context) => EditProfileScreen(user: userId),
-                        //   ),
-                        // );
-                      },
-                      child: Text(
-                        'Editar',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 20,
-                      left: 20,
-                      right: 20,
-                    ),
-                    child: SizedBox(
-                      height: 80,
-                      child: Card(
-                        elevation: 10,
-                        color: Color.fromRGBO(27, 34, 47, 1),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              'Name',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20,
-                              ),
+                          elevation: 6,
+                        ),
+                        onPressed: () async {
+                          final userId = await userService.getDataUser();
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => EditProfileScreen(user: userId),
                             ),
-                            Text(
-                              user.name,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
+                          );
+                          if (result == true) {
+                            setState(() {
+                              _refresScreen();
+                            });
+                          }
+                        },
+                        icon: Icon(Icons.edit, color: Colors.white, size: 20),
+                        label: Text(
+                          'Editar',
+                          style: GoogleFonts.lato(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10,
-                      left: 20,
-                      right: 20,
-                    ),
-                    child: SizedBox(
-                      height: 80,
-                      child: Card(
-                        elevation: 10,
-                        color: Color.fromRGBO(27, 34, 47, 1),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              'Last Name',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              user.lastname,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
+                    const SizedBox(height: 30),
+                    _profileInfoCard('Nombre', user.name),
+                    _profileInfoCard('Apellido', user.lastname),
+                    _profileInfoCard('Usuario', user.username),
+                    _profileInfoCard('Correo', user.email, isEmail: true),
+                    const SizedBox(height: 30),
+                    SizedBox(
+                      width: 200,
+                      height: 48,
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey[700],
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18),
+                          ),
+                          elevation: 6,
+                        ),
+                        onPressed: logOut,
+                        icon: Icon(Icons.logout, color: Colors.white, size: 22),
+                        label: Text(
+                          'Cerrar sesión',
+                          style: GoogleFonts.lato(
+                            color: Colors.white,
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10,
-                      left: 20,
-                      right: 20,
-                    ),
-                    child: SizedBox(
-                      height: 80,
-                      child: Card(
-                        elevation: 10,
-                        color: Color.fromRGBO(27, 34, 47, 1),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              'Username',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              user.username,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(
-                      top: 10,
-                      left: 20,
-                      right: 20,
-                    ),
-                    child: SizedBox(
-                      height: 80,
-                      child: Card(
-                        elevation: 10,
-                        color: Color.fromRGBO(27, 34, 47, 1),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: [
-                            Text(
-                              'Email',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20,
-                              ),
-                            ),
-                            Text(
-                              user.email,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 20,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  SizedBox(
-                    width: 350,
-                    height: 50,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(53, 49, 149, 1),
-                      ),
-                      onPressed: logOut,
-                      child: Text(
-                        'Log Out',
-                        style: TextStyle(color: Colors.white, fontSize: 17),
-                      ),
-                    ),
-                  ),
-                ],
+                    const SizedBox(height: 30),
+                  ],
+                ),
               );
             } else {
-              return Text('No hay datos', style: TextStyle(color: Colors.red));
+              return Text(
+                'No hay datos',
+                style: GoogleFonts.lato(color: Colors.red, fontSize: 18),
+              );
             }
           },
+        ),
+      ),
+    );
+  }
+
+  Widget _profileInfoCard(String label, String value, {bool isEmail = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+      child: Card(
+        elevation: 8,
+        color: Color.fromRGBO(251, 248, 246, 1),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                label,
+                style: GoogleFonts.lato(
+                  color: Colors.blueGrey[700],
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              Flexible(
+                child: Text(
+                  value,
+                  style: GoogleFonts.lato(
+                    color: Colors.blueGrey[900],
+                    fontSize: 17,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  maxLines: isEmail ? 2 : 1,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.right,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

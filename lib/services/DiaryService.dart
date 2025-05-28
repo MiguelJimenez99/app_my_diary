@@ -30,18 +30,11 @@ class DiaryServices {
 
         final diariesList = data['posts'] as List;
         _activities = diariesList.map((item) => Diary.fromJson(item)).toList();
-
-        // DEBUG: Mostrar fechas para comprobar el orden
-        for (var d in _activities) {
-          print('Fecha: ${d.date}');
-        }
-
         return _activities;
       } else {
         throw Exception('Error HTTP: ${response.statusCode}');
       }
     } catch (e) {
-      print(e);
       throw Exception('Error al obtener las actividades del usuario');
     }
   }
