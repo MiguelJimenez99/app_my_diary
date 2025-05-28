@@ -37,21 +37,25 @@ class _HomePageScreenState extends State<HomePageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFF0F172A),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(30),
+        child: AppBar(
+          backgroundColor: Color.fromRGBO(251, 248, 246, 1),
 
-        actions: [
-          IconButton(
-            onPressed: logOut,
-            icon: Icon(Icons.exit_to_app, color: Colors.white),
-          ),
-        ],
+          actions: [
+            IconButton(
+              onPressed: logOut,
+              icon: Icon(Icons.exit_to_app, color: Colors.black),
+            ),
+          ],
+        ),
       ),
       body: _pages[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color(0xFF0F172A),
-        selectedItemColor: Color.fromRGBO(53, 49, 149, 1),
-        unselectedItemColor: Colors.white,
+        backgroundColor: Color.fromRGBO(210, 224, 238, 1),
+        selectedItemColor: Colors.black87,
+        unselectedItemColor: Colors.black26,
+        elevation: 6,
         currentIndex: _selectedIndex,
         type: BottomNavigationBarType.fixed,
         onTap: _onItemTap,

@@ -1,4 +1,5 @@
 import 'package:app_my_diary/providers/DiaryProvider.dart';
+import 'package:app_my_diary/providers/NoteProvider.dart';
 import 'package:app_my_diary/providers/PhotoProvider.dart';
 import 'package:app_my_diary/providers/UserProvider.dart';
 import 'package:app_my_diary/providers/weather_provider.dart';
@@ -14,13 +15,14 @@ import 'package:provider/provider.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load();
-  
+
   runApp(
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => DiaryProvider()),
         ChangeNotifierProvider(create: (_) => PhotoProvider()),
+        ChangeNotifierProvider(create: (_) => NoteProvider()),
         ChangeNotifierProvider(create: (_) => WeatherProvider()),
       ],
       child: const MyApp(),

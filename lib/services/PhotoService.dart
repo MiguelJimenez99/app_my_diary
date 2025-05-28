@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:app_my_diary/helpers/ImageHelper.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 import 'package:http_parser/http_parser.dart';
@@ -55,7 +56,6 @@ class PhotoService {
   Future<void> postPhotoUser({
     required XFile imageFile,
     String? description,
-
   }) async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -65,20 +65,23 @@ class PhotoService {
         throw Exception('Token vencido o invalido');
       }
 
+      // ✅ Comprimir imagen
+      final compressedImage = await compressImage(imageFile);
+
       final url = Uri.parse('$baseUrl/api/user/photos/newPhoto');
       final request =
           http.MultipartRequest('POST', url)
             ..headers['authorization'] = token
             ..fields['description'] = description ?? '';
 
-      // Detectar tipo MIME
-      final mimeType = lookupMimeType(imageFile.path) ?? 'image/jpeg';
+      // ✅ Detectar tipo MIME del archivo comprimido
+      final mimeType = lookupMimeType(compressedImage.path) ?? 'image/jpeg';
       final mimeSplit = mimeType.split('/');
 
       request.files.add(
         await http.MultipartFile.fromPath(
           'photo',
-          imageFile.path,
+          compressedImage.path,
           contentType: MediaType(mimeSplit[0], mimeSplit[1]),
         ),
       );
