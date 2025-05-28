@@ -13,16 +13,16 @@ class Note {
     String description;
     String date;
     String userId;
-    String createdAt;
-    String updatedAt;
+    String? createdAt;
+    String? updatedAt;
 
     Note({
         required this.id,
         required this.description,
         required this.date,
         required this.userId,
-        required this.createdAt,
-        required this.updatedAt,
+         this.createdAt,
+         this.updatedAt,
     });
 
     factory Note.fromJson(Map<String, dynamic> json) => Note(
@@ -30,8 +30,8 @@ class Note {
         description: json["description"],
         date: json["date"],
         userId: json["userId"],
-        createdAt: json["createdAt"],
-        updatedAt: json["updatedAt"],
+        createdAt: json["createdAt"] ?? '',
+        updatedAt: json["updatedAt"] ?? '',
     );
 
     Map<String, dynamic> toJson() => {

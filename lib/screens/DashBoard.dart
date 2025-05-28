@@ -9,6 +9,7 @@ import 'package:app_my_diary/providers/UserProvider.dart';
 import 'package:app_my_diary/providers/weather_provider.dart';
 import 'package:app_my_diary/screens/DiaryScreen/InfoDiaryScreen.dart';
 import 'package:app_my_diary/screens/GalleryScreens/InfoPhotoScreen.dart';
+import 'package:app_my_diary/screens/NotesScreens/NotesScreen.dart';
 import 'package:app_my_diary/services/UserServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -518,8 +519,20 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.all(0),
                               ),
-                              onPressed: () {
-                                print('Mis notas');
+                              onPressed: () async {
+                                final user =
+                                    Provider.of<UserProvider>(
+                                      context,
+                                      listen: false,
+                                    ).user;
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => NotesScreen(user: user!),
+                                  ),
+                                );
                               },
                               child: Text(
                                 'Mis Notas',

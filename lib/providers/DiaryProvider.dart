@@ -29,26 +29,9 @@ class DiaryProvider extends ChangeNotifier {
     String date,
     String userId,
   ) async {
-    final newEntryId = await diaryServices.newPostActivity(
-      title,
-      description,
-      mood,
-      date,
-      userId,
-    );
+    await diaryServices.newPostActivity(title, description, mood, date, userId);
 
-    // Option 1: If you have all the data, create a Diary object directly
-    final newDiary = Diary(
-      id: newEntryId,
-      title: title,
-      description: description,
-      date: date,
-      mood: mood,
-      userId: userId,
-    );
-
-    _diary ??= [];
-    _diary?.add(newDiary);
+    await fetchDiary();
     notifyListeners();
   }
 

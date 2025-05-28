@@ -13,7 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PhotoService {
   //https://back-my-diary-v2.onrender.com
-  static String baseUrl = 'http://192.168.1.42:3000';
+  static String baseUrl = 'https://back-my-diary-v2.onrender.com';
 
   List<Photo> _photos = [];
 

@@ -19,6 +19,8 @@ class DiaryScreen extends StatefulWidget {
 }
 
 class _DiaryScreenState extends State<DiaryScreen> {
+
+
   UserService userService = UserService();
   DiaryServices diaryServices = DiaryServices();
 
@@ -30,6 +32,8 @@ class _DiaryScreenState extends State<DiaryScreen> {
     });
   }
 
+ 
+
   @override
   Widget build(BuildContext context) {
     final diaryProvider = context.watch<DiaryProvider>();
@@ -40,6 +44,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
         child: Stack(
           children: [
             SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -58,30 +63,13 @@ class _DiaryScreenState extends State<DiaryScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 30),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Mis pensamientos más secretos',
-                          style: GoogleFonts.lato(
-                            color: Colors.blueGrey[400],
-                            fontSize: 17,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(width: 70),
-                        TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.blueGrey,
-                          ),
-                          onPressed: diaryProvider.fetchDiary,
-                          child: Text(
-                            'Actualizar',
-                            style: GoogleFonts.lato(
-                              textStyle: TextStyle(color: Colors.white),
-                            ),
-                          ),
-                        ),
-                      ],
+                    child: Text(
+                      'Mis pensamientos más secretos',
+                      style: GoogleFonts.lato(
+                        color: Colors.blueGrey[400],
+                        fontSize: 17,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ),
                   Padding(
@@ -127,9 +115,10 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                             context,
                                             MaterialPageRoute(
                                               builder:
-                                                  (context) => InfoDiaryScreen(
-                                                    diary: diary,
-                                                  ),
+                                                  (context) =>
+                                                      InfoDiaryScreen(
+                                                        diary: diary,
+                                                      ),
                                             ),
                                           );
                                         },
@@ -142,15 +131,15 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                             1,
                                           ),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(
-                                              20,
-                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(20),
                                           ),
                                           child: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 20,
-                                              vertical: 18,
-                                            ),
+                                            padding:
+                                                const EdgeInsets.symmetric(
+                                                  horizontal: 20,
+                                                  vertical: 18,
+                                                ),
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -181,7 +170,8 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                                             final confirm = await showDialog<
                                                               bool
                                                             >(
-                                                              context: context,
+                                                              context:
+                                                                  context,
                                                               builder:
                                                                   (
                                                                     context,
@@ -239,8 +229,7 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                                                     'Eliminado correctamente',
                                                                     style: GoogleFonts.lato(
                                                                       color:
-                                                                          Colors
-                                                                              .white,
+                                                                          Colors.white,
                                                                       fontSize:
                                                                           17,
                                                                     ),
@@ -264,7 +253,8 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                                           icon: Icon(
                                                             Icons.delete,
                                                             color:
-                                                                Colors.red[400],
+                                                                Colors
+                                                                    .red[400],
                                                           ),
                                                         ),
                                                         IconButton(
@@ -297,19 +287,23 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                                 Text(
                                                   diary.title,
                                                   style: GoogleFonts.lato(
-                                                    color: Colors.blueGrey[900],
+                                                    color:
+                                                        Colors.blueGrey[900],
                                                     fontSize: 20,
-                                                    fontWeight: FontWeight.w700,
+                                                    fontWeight:
+                                                        FontWeight.w700,
                                                   ),
                                                 ),
                                                 const SizedBox(height: 8),
                                                 Container(
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 12,
-                                                    vertical: 6,
-                                                  ),
+                                                  padding:
+                                                      EdgeInsets.symmetric(
+                                                        horizontal: 12,
+                                                        vertical: 6,
+                                                      ),
                                                   decoration: BoxDecoration(
-                                                    color: Colors.blueGrey[100],
+                                                    color:
+                                                        Colors.blueGrey[100],
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                           100,
@@ -319,7 +313,8 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                                     diary.mood,
                                                     style: GoogleFonts.lato(
                                                       color:
-                                                          Colors.blueGrey[800],
+                                                          Colors
+                                                              .blueGrey[800],
                                                       fontWeight:
                                                           FontWeight.w600,
                                                     ),
@@ -332,9 +327,11 @@ class _DiaryScreenState extends State<DiaryScreen> {
                                                       TextOverflow.ellipsis,
                                                   maxLines: 2,
                                                   style: GoogleFonts.lato(
-                                                    color: Colors.blueGrey[900],
+                                                    color:
+                                                        Colors.blueGrey[900],
                                                     fontSize: 15,
-                                                    fontWeight: FontWeight.w400,
+                                                    fontWeight:
+                                                        FontWeight.w400,
                                                   ),
                                                 ),
                                               ],

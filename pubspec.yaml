@@ -48,6 +48,7 @@ dependencies:
   flutter_dotenv: ^5.2.1
   google_fonts: ^6.2.1
   flutter_image_compress: ^2.4.0
+  another_flushbar: ^1.12.30
   
   
 
