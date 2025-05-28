@@ -1,10 +1,11 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:app_my_diary/class/UserClass.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserService {
+class UserService  {
   //https://back-my-diary-v2.onrender.com
   final String baseUrl = 'https://back-my-diary-v2.onrender.com';
 

@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class DiaryServices {
   //https://back-my-diary-v2.onrender.com
+  //http://192.168.1.42:3000
   static String baseUrl = 'https://back-my-diary-v2.onrender.com';
 
   List<Diary> _activities = [];
@@ -29,13 +30,11 @@ class DiaryServices {
 
         final diariesList = data['posts'] as List;
         _activities = diariesList.map((item) => Diary.fromJson(item)).toList();
-
         return _activities;
       } else {
         throw Exception('Error HTTP: ${response.statusCode}');
       }
     } catch (e) {
-      print(e);
       throw Exception('Error al obtener las actividades del usuario');
     }
   }
