@@ -12,6 +12,7 @@ class Photo {
   String id;
   String description;
   String url;
+  bool? isFavorite;
   String cloudinaryId;
   String createdAt;
 
@@ -19,6 +20,7 @@ class Photo {
     required this.id,
     required this.description,
     required this.url,
+    this.isFavorite = false,
     required this.cloudinaryId,
     required this.createdAt,
   });
@@ -27,6 +29,7 @@ class Photo {
     id: json["_id"] ?? '',
     description: json["description"] ?? '',
     url: json["url"] ?? '',
+    isFavorite: json["isFavorite"] ?? false,
     cloudinaryId: json["cloudinaryId"] ?? '',
     createdAt: json["createdAt"] ?? '',
   );
@@ -35,6 +38,7 @@ class Photo {
     "id": id,
     "description": description,
     "url": url,
+    "isFavorite": isFavorite,
     "cloudinaryId": cloudinaryId,
     "createdAt": createdAt,
   };

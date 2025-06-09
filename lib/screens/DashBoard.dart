@@ -1,16 +1,18 @@
 import 'dart:convert';
 
 import 'package:app_my_diary/class/DiaryClass.dart';
+import 'package:app_my_diary/class/NoteClass.dart';
 import 'package:app_my_diary/class/PhotoClass.dart';
 import 'package:app_my_diary/class/UserClass.dart';
 import 'package:app_my_diary/providers/DiaryProvider.dart';
+import 'package:app_my_diary/providers/NoteProvider.dart';
 import 'package:app_my_diary/providers/PhotoProvider.dart';
 import 'package:app_my_diary/providers/UserProvider.dart';
 import 'package:app_my_diary/providers/weather_provider.dart';
 import 'package:app_my_diary/screens/DiaryScreen/InfoDiaryScreen.dart';
+import 'package:app_my_diary/screens/FavoriteScreen/FavoritesScreen.dart';
 import 'package:app_my_diary/screens/GalleryScreens/InfoPhotoScreen.dart';
 import 'package:app_my_diary/screens/NotesScreens/NotesScreen.dart';
-import 'package:app_my_diary/services/UserServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -26,10 +28,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   User? _user;
   Photo? _photo;
   Diary? _diary;
+  Note? _note;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadDataUser();
     _loadDataPhoto();
@@ -81,6 +83,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   @override
   Widget build(BuildContext context) {
     final weatherProvider = Provider.of<WeatherProvider>(context);
+
     return SafeArea(
       child: RefreshIndicator(
         onRefresh: _loadDataPhoto,
@@ -557,7 +560,20 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                 padding: EdgeInsets.all(0),
                               ),
                               onPressed: () {
-                                print('Mis favoritos');
+                                final user =
+                                    Provider.of<UserProvider>(
+                                      context,
+                                      listen: false,
+                                    ).user;
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) =>
+                                            MyFavoriteItemsScreen(user: user!),
+                                  ),
+                                );
                               },
                               child: Text(
                                 'Favoritos',

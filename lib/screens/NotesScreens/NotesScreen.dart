@@ -1,14 +1,19 @@
-import 'package:another_flushbar/flushbar.dart';
-import 'package:app_my_diary/class/UserClass.dart';
-import 'package:app_my_diary/providers/NoteProvider.dart';
+// ignore_for_file: use_build_context_synchronously, file_names
+import 'package:app_my_diary/dialogs/DeleteNoteDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+
+import 'package:app_my_diary/class/UserClass.dart';
+import 'package:app_my_diary/providers/NoteProvider.dart';
+import 'package:app_my_diary/screens/NotesScreens/FormScreenDialog.dart';
+import 'package:app_my_diary/screens/NotesScreens/InfoNoteScreenDialog.dart';
 
 class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key, required this.user});
 
   final User user;
+
   @override
   State<NotesScreen> createState() => _NotesScreenState();
 }
@@ -16,7 +21,6 @@ class NotesScreen extends StatefulWidget {
 class _NotesScreenState extends State<NotesScreen> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     Future.delayed(Duration.zero, () {
       Provider.of<NoteProvider>(context, listen: false).fetchNotes();
@@ -50,18 +54,60 @@ class _NotesScreenState extends State<NotesScreen> {
                 ? Center(child: CircularProgressIndicator())
                 : notesList.isEmpty
                 ? Text('No hay notas registradas')
-                : Padding(
-                  padding: const EdgeInsets.only(top: 60),
-                  child: ListView.builder(
-                    itemCount: notesList.length,
-                    itemBuilder: (context, index) {
-                      final note = notesList[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(
-                          left: 20,
-                          right: 20,
-                          bottom: 10,
-                        ),
+                : ListView.builder(
+                  itemCount: notesList.length,
+                  itemBuilder: (context, index) {
+                    final note = notesList[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(
+                        left: 20,
+                        right: 20,
+                        bottom: 10,
+                      ),
+                      child: GestureDetector(
+                        onTap: () {
+                          showGeneralDialog(
+                            context: context,
+                            barrierDismissible: true,
+                            barrierLabel:
+                                MaterialLocalizations.of(
+                                  context,
+                                ).modalBarrierDismissLabel,
+                            barrierColor: Colors.black54,
+                            transitionDuration: const Duration(
+                              milliseconds: 300,
+                            ), // Duración de la animación
+                            pageBuilder: (
+                              context,
+                              animation,
+                              secondaryAnimation,
+                            ) {
+                              //retorn el showDialog que muestra la informacion de la nota con la opciones de editar o cancelar
+                              //para devolver a la vista inicial
+                              return InfoNoteScreenDialog(
+                                noteProvider: noteProvider,
+                                note: note,
+                              );
+                            },
+                            transitionBuilder: (
+                              context,
+                              animation,
+                              secondaryAnimation,
+                              child,
+                            ) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: ScaleTransition(
+                                  scale: CurvedAnimation(
+                                    parent: animation,
+                                    curve: Curves.easeOutBack,
+                                  ),
+                                  child: child,
+                                ),
+                              );
+                            },
+                          );
+                        },
                         child: Card(
                           elevation: 5,
                           child: ListTile(
@@ -89,14 +135,54 @@ class _NotesScreenState extends State<NotesScreen> {
                               ),
                             ),
                             trailing: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.arrow_forward_ios),
+                              onPressed: () async {
+                                showGeneralDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  barrierLabel:
+                                      MaterialLocalizations.of(
+                                        context,
+                                      ).modalBarrierDismissLabel,
+                                  barrierColor: Colors.black54,
+                                  transitionDuration: Duration(
+                                    milliseconds: 300,
+                                  ),
+                                  pageBuilder: (
+                                    context,
+                                    animation,
+                                    secundaryAnimation,
+                                  ) {
+                                    return AlertDeleteNote(id: note.id);
+                                  },
+                                  transitionBuilder: (
+                                    context,
+                                    animation,
+                                    secondaryAnimation,
+                                    child,
+                                  ) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: ScaleTransition(
+                                        scale: CurvedAnimation(
+                                          parent: animation,
+                                          curve: Curves.easeOutBack,
+                                        ),
+                                        child: child,
+                                      ),
+                                    );
+                                  },
+                                );
+                              },
+                              icon: Icon(
+                                Icons.delete,
+                                color: Colors.redAccent.shade100,
+                              ),
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
+                      ),
+                    );
+                  },
                 ),
           ],
         ),
@@ -114,154 +200,6 @@ class _NotesScreenState extends State<NotesScreen> {
           );
         },
         child: Icon(Icons.add, color: Colors.white),
-      ),
-    );
-  }
-}
-
-// este es la ventana emergente para agregar una nueva nota.
-class MyDialogForm extends StatefulWidget {
-  const MyDialogForm({super.key, required this.user});
-
-  final User user;
-  @override
-  State<MyDialogForm> createState() => _MyDialogFormState();
-}
-
-class _MyDialogFormState extends State<MyDialogForm> {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _controllerDescription = TextEditingController();
-
-  void createNote() async {
-    try {
-      if (_formKey.currentState!.validate()) {
-        _formKey.currentState!.save();
-
-        await Provider.of<NoteProvider>(
-          context,
-          listen: false,
-        ).createNoteProvider(
-          _controllerDescription.text.trim(),
-          widget.user.id,
-        );
-
-        setState(() {
-          _controllerDescription.clear();
-        });
-
-        Flushbar(
-          message: 'Nota agregada correctamente',
-          duration: Duration(seconds: 2),
-          margin: EdgeInsets.all(8.0),
-          borderRadius: BorderRadius.circular(8),
-          backgroundColor: Colors.blueGrey,
-          flushbarPosition: FlushbarPosition.BOTTOM,
-        ).show(context);
-      }
-    } catch (error) {
-      throw Exception('Error interno: $error');
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: SizedBox(
-        width: 300,
-        height: 300,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 20),
-              child: Text(
-                'Nueva Nota',
-                style: GoogleFonts.lato(
-                  textStyle: TextStyle(
-                    fontSize: 30,
-                    color: Colors.blueGrey[800],
-                  ),
-                ),
-              ),
-            ),
-            TextFormField(
-              decoration: InputDecoration(
-                labelText: 'Descripción',
-                labelStyle: GoogleFonts.lato(color: Colors.blueGrey[400]),
-                prefixIcon: Icon(Icons.notes, color: Colors.blueGrey),
-                border: InputBorder.none,
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-                errorBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.white),
-                ),
-                filled: true,
-                fillColor: Colors.white,
-              ),
-              maxLines: 5,
-              controller: _controllerDescription,
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'El campo no puede ir vacio';
-                }
-                return null;
-              },
-            ),
-
-            Padding(
-              padding: const EdgeInsets.only(top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      elevation: 5,
-                      backgroundColor: Color.fromRGBO(210, 224, 238, 1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
-                        side: BorderSide(color: Colors.blueGrey),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    label: Text(
-                      'Cancelar',
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(
-                          color: Colors.blueGrey,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                    icon: Icon(Icons.close, color: Colors.blueGrey),
-                  ),
-                  SizedBox(width: 30),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueGrey,
-                    ),
-                    onPressed: createNote,
-                    label: Text(
-                      'Guardar',
-                      style: GoogleFonts.lato(
-                        textStyle: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                    ),
-                    icon: Icon(Icons.save, color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
