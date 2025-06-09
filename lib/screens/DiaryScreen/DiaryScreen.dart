@@ -2,7 +2,6 @@
 
 import 'package:app_my_diary/providers/DiaryProvider.dart';
 import 'package:flutter/material.dart';
-import 'package:app_my_diary/class/DiaryClass.dart';
 import 'package:app_my_diary/screens/DiaryScreen/DiaryFormScreen.dart';
 import 'package:app_my_diary/screens/DiaryScreen/EditDiaryScreen.dart';
 import 'package:app_my_diary/screens/DiaryScreen/InfoDiaryScreen.dart';

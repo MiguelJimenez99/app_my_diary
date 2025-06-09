@@ -1,9 +1,10 @@
 // ignore_for_file: must_be_immutable, no_leading_underscores_for_local_identifiers, file_names
 
+import 'package:app_my_diary/providers/PhotoProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:app_my_diary/class/PhotoClass.dart';
 import 'package:app_my_diary/services/PhotoService.dart';
-import 'package:share_plus/share_plus.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -28,10 +29,10 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
   late PageController _controller;
   int _currentIndex = 0;
   late List<Photo> _photos;
+  bool isFavorite = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _photos = List.from(widget.photos);
     _currentIndex = widget.index;
@@ -45,6 +46,9 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
         });
       }
     });
+    Future.delayed(Duration.zero, () {
+      Provider.of<PhotoProvider>(context, listen: false).fetchPhoto();
+    });
   }
 
   @override
@@ -56,6 +60,19 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
   void _sharePhoto() {
     // ignore: deprecated_member_use
     photoService.SharePhotoFromUrl(_photos[_currentIndex].url);
+  }
+
+  void _isFavorite() async {
+    try {
+      final providerPhoto = Provider.of<PhotoProvider>(context, listen: false);
+      await providerPhoto.favoritePhotoProvider(_photos[_currentIndex].id);
+
+      setState(() {
+        isFavorite = !isFavorite;
+      });
+    } catch (error) {
+      throw Exception('Error al actualizar el estado: $error');
+    }
   }
 
   void _delPhoto() async {
@@ -101,6 +118,11 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final providerPhoto = context.watch<PhotoProvider>();
+    final notes = providerPhoto.photo.firstWhere(
+      (photo) => photo.id == _photos[_currentIndex].id,
+      orElse: () => widget.dataPhoto,
+    );
     return Scaffold(
       backgroundColor: Color.fromRGBO(251, 248, 246, 1),
       appBar: AppBar(
@@ -114,6 +136,18 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
             fontWeight: FontWeight.bold,
           ),
         ),
+        actions: [
+          IconButton(
+            onPressed: _isFavorite,
+            icon: Icon(
+              notes.isFavorite ?? false
+                  ? Icons.favorite
+                  : Icons.favorite_border,
+              color: notes.isFavorite ?? false ? Colors.red : Colors.grey,
+              size: 30,
+            ),
+          ),
+        ],
         centerTitle: true,
       ),
       body: SafeArea(
@@ -242,13 +276,12 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
                         icon: Icon(Icons.delete, color: Colors.red[400]),
                         tooltip: 'Eliminar',
                       ),
-                      if (_photos[_currentIndex].description != null &&
-                          _photos[_currentIndex].description!.isNotEmpty)
+                      if (_photos[_currentIndex].description.isNotEmpty)
                         Expanded(
                           child: Padding(
                             padding: const EdgeInsets.only(left: 12),
                             child: Text(
-                              _photos[_currentIndex].description!,
+                              _photos[_currentIndex].description,
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.lato(
