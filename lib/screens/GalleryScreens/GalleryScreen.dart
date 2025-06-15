@@ -19,7 +19,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _refreshScreen();
   }
@@ -29,9 +28,6 @@ class _GalleryScreenState extends State<GalleryScreen> {
       _photos = photoService.getUserPhotos();
     });
   }
-
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +111,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                             return Center(
                               child: Text(
                                 'No hay actividad reciente',
-                                style: TextStyle(
+                                style: GoogleFonts.lato(
                                   color: Colors.black54,
                                   fontSize: 17,
                                 ),

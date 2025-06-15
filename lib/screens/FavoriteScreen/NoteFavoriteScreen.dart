@@ -291,6 +291,8 @@ class NoteFavoriteScreen extends StatelessWidget {
                                         ),
                                         child: Text(
                                           note.description,
+                                          overflow: TextOverflow.ellipsis,
+                                          maxLines: 3,
                                           style: GoogleFonts.lato(
                                             color: Colors.blueGrey[800],
                                           ),

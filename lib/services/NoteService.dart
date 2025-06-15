@@ -5,6 +5,7 @@ import 'package:app_my_diary/class/NoteClass.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class NoteService {
+  // static String baseUrl = 'https://back-my-diary-v2.onrender.com';
   static String baseUrl = 'http://192.168.1.42:3000';
 
   List<Note> _notes = [];
@@ -27,11 +28,17 @@ class NoteService {
         final listNotes = data['getNotes'] as List;
         _notes = listNotes.map((note) => Note.fromJson(note)).toList();
         return _notes;
+      } else if (response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        final listNotes = data['getNotes'] as List;
+        _notes = listNotes.map((note) => Note.fromJson(note)).toList();
+        return _notes;
       } else {
-        throw Exception('Mensaje: ${response.body}');
+        final data = jsonDecode(response.body);
+        final messageError = data['message'];
+        throw Exception('Error: $messageError');
       }
     } catch (error) {
-      print(error);
       throw Exception('Error en el servidor: $error');
     }
   }
@@ -42,7 +49,7 @@ class NoteService {
       final token = prefs.getString('token');
 
       if (token == null) {
-        throw Exception('TOken vencido o invalido');
+        throw Exception('Token vencido o invalido');
       }
 
       final url = Uri.parse('$baseUrl/api/user/notes/createNote');

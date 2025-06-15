@@ -59,7 +59,15 @@ class PhotoFavoriteScreen extends StatelessWidget {
                 color: Color.fromRGBO(251, 248, 246, 1),
                 child:
                     _favoritePhoto.isEmpty
-                        ? Center(child: Text('No tienes Fotos favoritas'))
+                        ? Center(
+                          child: Text(
+                            'No tienes Fotos favoritas',
+                            style: GoogleFonts.lato(
+                              fontSize: 17,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        )
                         : ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: _favoritePhoto.length,

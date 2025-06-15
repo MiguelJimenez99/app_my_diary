@@ -28,7 +28,7 @@ void main() async {
       child: const MyApp(),
     ),
   );
-}  
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Material App',
+      title: 'My Diary V2',
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashScreen(),

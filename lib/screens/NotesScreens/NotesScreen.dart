@@ -53,7 +53,15 @@ class _NotesScreenState extends State<NotesScreen> {
             noteProvider.isLoading
                 ? Center(child: CircularProgressIndicator())
                 : notesList.isEmpty
-                ? Text('No hay notas registradas')
+                ? Center(
+                  child: Text(
+                    'No hay notas registradas',
+                    style: GoogleFonts.lato(
+                      color: Colors.black54,
+                      fontSize: 17,
+                    ),
+                  ),
+                )
                 : ListView.builder(
                   itemCount: notesList.length,
                   itemBuilder: (context, index) {

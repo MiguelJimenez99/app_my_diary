@@ -156,16 +156,7 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
             Container(
               width: double.infinity,
               height: double.infinity,
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color.fromRGBO(210, 224, 238, 0.7),
-                    Color.fromRGBO(251, 248, 246, 1),
-                  ],
-                ),
-              ),
+              decoration: BoxDecoration(color: Colors.black38),
             ),
             Column(
               children: [
@@ -178,11 +169,11 @@ class _InfoPhotoScreenState extends State<InfoPhotoScreen> {
                       return Center(
                         child: Padding(
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 16,
+                            horizontal: 10,
+                            vertical: 10,
                           ),
+
                           child: ClipRRect(
-                            borderRadius: BorderRadius.circular(24),
                             child: Container(
                               color: Colors.grey[100],
                               child: InteractiveViewer(

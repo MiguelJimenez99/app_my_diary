@@ -36,14 +36,13 @@ class _MyFavoriteItemsScreenState extends State<MyFavoriteItemsScreen> {
   Widget build(BuildContext context) {
     final user = Provider.of<UserProvider>(context, listen: false).user;
     final providerNote = context.watch<NoteProvider>().notes;
+    final providerPhotos = context.watch<PhotoProvider>().photo;
+
     _favoriteNotes =
         providerNote.where((note) => note.isFavorite == true).toList();
-
-    final providerPhotos =
-        Provider.of<PhotoProvider>(context, listen: false).photo;
-
     _favoritePhoto =
         providerPhotos.where((photo) => photo.isFavorite == true).toList();
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromRGBO(251, 248, 246, 1),
@@ -71,7 +70,3 @@ class _MyFavoriteItemsScreenState extends State<MyFavoriteItemsScreen> {
     );
   }
 }
-
-
-
-

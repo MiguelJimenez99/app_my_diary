@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:app_my_diary/class/UserClass.dart';
 import 'package:app_my_diary/services/UserServices.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key, required this.user});
@@ -23,7 +24,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     controllerName = TextEditingController(text: widget.user.name);
     controllerLastName = TextEditingController(text: widget.user.lastname);
@@ -83,204 +83,167 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        backgroundColor: Color(0xFF0F172A),
+        backgroundColor: Color.fromRGBO(251, 248, 246, 1),
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.blueGrey[900]),
+        title: Text(
+          'Editar Perfil',
+          style: GoogleFonts.lato(
+            color: Colors.blueGrey[900],
+            fontWeight: FontWeight.bold,
+            fontSize: 26,
+          ),
+        ),
+        centerTitle: true,
       ),
-      backgroundColor: Color(0xFF0F172A),
+      backgroundColor: Color.fromRGBO(251, 248, 246, 1),
       body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(color: Color(0xFF0F172A)),
-          child: FutureBuilder<User>(
-            future: userService.getDataUser(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else if (snapshot.hasError) {
-                return Center(
-                  child: Text(
-                    '${snapshot.error}',
-                    style: TextStyle(color: Colors.red),
-                  ),
-                );
-              } else if (snapshot.hasData) {
-                return SingleChildScrollView(
-                  child: Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 50,
-                          child: Center(
-                            child: Text(
-                              'Editar Perfil',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 30,
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 100,
-                          child: Align(
-                            alignment: Alignment.topLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 20),
-                              child: CircleAvatar(
-                                radius: 50,
-                                child: Icon(Icons.person, size: 50),
-                              ),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Nombre',
-                              labelStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
-                              border: OutlineInputBorder(),
-                            ),
-                            style: TextStyle(color: Colors.white),
-                            autofocus: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Por favor, este campo no puede ir vacio';
-                              }
-                              return null;
-                            },
-
-                            controller: controllerName,
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Apellido',
-                              labelStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
-                              border: OutlineInputBorder(),
-                            ),
-                            style: TextStyle(color: Colors.white),
-                            autofocus: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Por favor, este campo no puede ir vacio';
-                              }
-                              return null;
-                            },
-
-                            controller: controllerLastName,
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Nombre de usuario',
-                              labelStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
-                              border: OutlineInputBorder(),
-                            ),
-                            style: TextStyle(color: Colors.white),
-                            autofocus: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Por favor, este campo no puede ir vacio';
-                              }
-                              return null;
-                            },
-
-                            controller: controllerUsername,
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 20, right: 20),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              labelText: 'Correo',
-                              labelStyle: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
-                              ),
-                              border: OutlineInputBorder(),
-                            ),
-                            style: TextStyle(color: Colors.white),
-                            autofocus: true,
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'El correo es obligatorio';
-                              }
-                              final emailRegex = RegExp(
-                                r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                              );
-
-                              if (!emailRegex.hasMatch(value)) {
-                                return 'Correo no válido';
-                              }
-                              return null;
-                            },
-
-                            controller: controllerEmail,
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Text(
-                                'Regresar',
-                                style: TextStyle(
-                                  fontSize: 17,
-                                  color: Color(0xFF0F172A),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 20),
-                            ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color.fromRGBO(53, 49, 149, 1),
-                              ),
-                              onPressed: saveChange,
-                              child: Text(
-                                'Guardar',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 17,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CircleAvatar(
+                    radius: 48,
+                    backgroundColor: Colors.blueGrey[100],
+                    child: Icon(
+                      Icons.person,
+                      size: 54,
+                      color: Colors.blueGrey[400],
                     ),
                   ),
-                );
-              } else {
-                return Center(
-                  child: Text(
-                    'No hay datos',
-                    style: TextStyle(color: Colors.red),
+                  const SizedBox(height: 24),
+                  _buildTextField(
+                    controller: controllerName,
+                    label: 'Nombre',
+                    icon: Icons.person_outline,
                   ),
-                );
-              }
-            },
+                  const SizedBox(height: 18),
+                  _buildTextField(
+                    controller: controllerLastName,
+                    label: 'Apellido',
+                    icon: Icons.person,
+                  ),
+                  const SizedBox(height: 18),
+                  _buildTextField(
+                    controller: controllerUsername,
+                    label: 'Nombre de usuario',
+                    icon: Icons.alternate_email,
+                  ),
+                  const SizedBox(height: 18),
+                  _buildTextField(
+                    controller: controllerEmail,
+                    label: 'Correo',
+                    icon: Icons.email_outlined,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'El correo es obligatorio';
+                      }
+                      final emailRegex = RegExp(
+                        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                      );
+
+                      if (!emailRegex.hasMatch(value)) {
+                        return 'Correo no válido';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 28),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: OutlinedButton(
+                          style: OutlinedButton.styleFrom(
+                            foregroundColor: Colors.blueGrey,
+                            side: BorderSide(color: Colors.blueGrey),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text(
+                            'Regresar',
+                            style: GoogleFonts.lato(
+                              color: Colors.blueGrey[900],
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      Expanded(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blueGrey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                          ),
+                          onPressed: saveChange,
+                          child: Text(
+                            'Guardar',
+                            style: GoogleFonts.lato(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      keyboardType: keyboardType,
+      validator:
+          validator ??
+          (value) {
+            if (value == null || value.isEmpty) {
+              return 'Por favor, este campo no puede ir vacío';
+            }
+            return null;
+          },
+      style: GoogleFonts.lato(color: Colors.blueGrey[900]),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: GoogleFonts.lato(color: Colors.blueGrey[700], fontSize: 16),
+        prefixIcon: Icon(icon, color: Colors.blueGrey),
+        filled: true,
+        fillColor: Colors.blueGrey[50],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 16,
         ),
       ),
     );

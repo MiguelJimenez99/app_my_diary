@@ -6,7 +6,7 @@ import 'package:app_my_diary/providers/NoteProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:share_plus/share_plus.dart';
 
 class InfoNoteScreenDialog extends StatefulWidget {
   const InfoNoteScreenDialog({
@@ -123,22 +123,40 @@ class _InfoNoteScreenDialogState extends State<InfoNoteScreenDialog> {
               ),
 
               Padding(
-                padding: const EdgeInsets.only(right: 30),
-                child: Align(
-                  alignment: Alignment.topRight,
-                  child: IconButton(
-                    onPressed: _favoriteNote,
-                    icon: Icon(
-                      notes.isFavorite ?? false
-                          ? Icons.favorite
-                          : Icons.favorite_border,
-                      color:
-                          notes.isFavorite ?? false ? Colors.red : Colors.grey,
-                      size: 30,
+                padding: const EdgeInsets.only(right: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    IconButton(
+                      onPressed: _favoriteNote,
+                      icon: Icon(
+                        notes.isFavorite ?? false
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color:
+                            notes.isFavorite ?? false
+                                ? Colors.red
+                                : Colors.grey,
+                        size: 25,
+                      ),
                     ),
-                  ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: IconButton(
+                        onPressed: () {
+                          Share.share(widget.note.description);
+                        },
+                        icon: Icon(
+                          Icons.share,
+                          color: Colors.blueGrey,
+                          size: 25,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
+
               Padding(
                 padding: const EdgeInsets.only(left: 30),
                 child: Row(
