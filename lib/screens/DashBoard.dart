@@ -1,4 +1,4 @@
-import 'dart:convert';
+import 'dart:developer';
 
 import 'package:app_my_diary/class/DiaryClass.dart';
 import 'package:app_my_diary/class/PhotoClass.dart';
@@ -8,9 +8,9 @@ import 'package:app_my_diary/providers/PhotoProvider.dart';
 import 'package:app_my_diary/providers/UserProvider.dart';
 import 'package:app_my_diary/providers/weather_provider.dart';
 import 'package:app_my_diary/screens/DiaryScreen/InfoDiaryScreen.dart';
+import 'package:app_my_diary/screens/FavoriteScreen/FavoritesScreen.dart';
 import 'package:app_my_diary/screens/GalleryScreens/InfoPhotoScreen.dart';
 import 'package:app_my_diary/screens/NotesScreens/NotesScreen.dart';
-import 'package:app_my_diary/services/UserServices.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +29,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _loadDataUser();
     _loadDataPhoto();
@@ -57,9 +56,13 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       final diaryProvider = Provider.of<DiaryProvider>(context, listen: false);
       await diaryProvider.fetchDiary();
 
-      setState(() {
-        _diary = diaryProvider.diary!.first;
-      });
+      if (diaryProvider.diary!.isEmpty) {
+        log('No tienes entradas registrada');
+      } else {
+        setState(() {
+          _diary = diaryProvider.diary!.first;
+        });
+      }
     } catch (e) {
       throw Exception('Error al cargar los datos del diario: $e');
     }
@@ -70,9 +73,13 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       final photoProvider = Provider.of<PhotoProvider>(context, listen: false);
       await photoProvider.fetchPhoto();
 
-      setState(() {
-        _photo = photoProvider.photo!.first;
-      });
+      if (photoProvider.photo.isEmpty) {
+        log('No tienes fotos guardadas');
+      } else {
+        setState(() {
+          _photo = photoProvider.photo.first;
+        });
+      }
     } catch (e) {
       throw Exception('Error al cargar la imagen: $e');
     }
@@ -81,6 +88,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   @override
   Widget build(BuildContext context) {
     final weatherProvider = Provider.of<WeatherProvider>(context);
+    final diaryProvider =
+        Provider.of<DiaryProvider>(context, listen: false).diary;
+    final listDiaryEmpty = diaryProvider == null || diaryProvider.isEmpty;
     return SafeArea(
       child: RefreshIndicator(
         onRefresh: _loadDataPhoto,
@@ -147,212 +157,274 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
                             // Tarjeta de Última Nota
-                            GestureDetector(
-                              onTap: () async {
-                                Diary entranceDiary;
-                                final diaryProvider =
-                                    Provider.of<DiaryProvider>(
-                                      context,
-                                      listen: false,
-                                    );
-                                await diaryProvider.fetchDiary();
-                                entranceDiary = diaryProvider.diary!.first;
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => InfoDiaryScreen(
-                                          diary: entranceDiary,
+                            listDiaryEmpty
+                                ? Container(
+                                  width: 180,
+                                  height: 180,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white,
+                                    borderRadius: BorderRadius.circular(24),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: Colors.blueGrey.withOpacity(
+                                          0.10,
                                         ),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                width: 180,
-                                height: 180,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(24),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.blueGrey.withOpacity(0.10),
-                                      blurRadius: 16,
-                                      offset: Offset(0, 8),
-                                    ),
-                                  ],
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.book,
-                                            color: Colors.blueGrey[400],
-                                          ),
-                                          SizedBox(width: 10),
-                                          Text(
-                                            'Última nota',
-                                            style: GoogleFonts.lato(
-                                              textStyle: TextStyle(
-                                                color: Colors.blueGrey[400],
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 6,
-                                        ),
-                                        child: Divider(
-                                          color: Colors.blueGrey[100],
-                                        ),
-                                      ),
-                                      _diary == null
-                                          ? Container(
-                                            width: 100,
-                                            height: 20,
-                                            decoration: BoxDecoration(
-                                              color: Colors.grey[300],
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                            ),
-                                          )
-                                          : Text(
-                                            _diary!.title,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: GoogleFonts.lato(
-                                              textStyle: TextStyle(
-                                                color: Colors.blueGrey[900],
-                                                fontWeight: FontWeight.w800,
-                                                fontSize: 20,
-                                              ),
-                                            ),
-                                          ),
-                                      const SizedBox(height: 6),
-                                      Flexible(
-                                        child:
-                                            _diary == null
-                                                ? Container(
-                                                  width: 100,
-                                                  height: 20,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey[300],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          10,
-                                                        ),
-                                                  ),
-                                                )
-                                                : Text(
-                                                  _diary!.description,
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: GoogleFonts.lato(
-                                                    textStyle: TextStyle(
-                                                      color:
-                                                          Colors.blueGrey[800],
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
+                                        blurRadius: 16,
+                                        offset: Offset(0, 8),
                                       ),
                                     ],
                                   ),
-                                ),
-                              ),
-                            ),
-                            // Tarjeta de Último Recuerdo
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => InfoPhotoScreen(
-                                          photos:
-                                              _photo != null ? [_photo!] : [],
-                                          index: 0,
-                                          dataPhoto: _photo!,
-                                        ),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                width: 180,
-                                height: 180,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(24),
-                                  color: Color.fromRGBO(219, 225, 231, 1),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.blueGrey.withOpacity(0.10),
-                                      blurRadius: 16,
-                                      offset: Offset(0, 8),
-                                    ),
-                                  ],
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(16),
                                   child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
                                     children: [
-                                      Row(
-                                        children: [
-                                          Icon(
-                                            Icons.photo,
-                                            color: Colors.blueGrey[400],
-                                          ),
-                                          SizedBox(width: 10),
-                                          Text(
-                                            'Último recuerdo',
-                                            style: GoogleFonts.lato(
-                                              textStyle: TextStyle(
-                                                color: Colors.blueGrey[400],
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600,
+                                      Padding(
+                                        padding: const EdgeInsets.all(16.0),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.book,
+                                              color: Colors.blueGrey[400],
+                                            ),
+                                            SizedBox(width: 10),
+                                            Text(
+                                              'Último Diario',
+                                              style: GoogleFonts.lato(
+                                                textStyle: TextStyle(
+                                                  color: Colors.blueGrey[400],
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                          vertical: 6,
-                                        ),
+                                        padding: EdgeInsets.all(5),
                                         child: Divider(
                                           color: Colors.blueGrey[100],
                                         ),
                                       ),
-                                      Expanded(
-                                        child:
-                                            _photo == null
-                                                ? Container(
-                                                  width: double.infinity,
-                                                  height: 90,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.grey[300],
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          16,
+                                      Text(
+                                        'No tienes entradas registradas',
+                                        textAlign: TextAlign.center,
+                                        style: GoogleFonts.lato(
+                                          fontSize: 15,
+                                          color: Colors.blueGrey[300],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                                : GestureDetector(
+                                  onTap: () async {
+                                    Diary entranceDiary;
+                                    final diaryProvider =
+                                        Provider.of<DiaryProvider>(
+                                          context,
+                                          listen: false,
+                                        );
+                                    await diaryProvider.fetchDiary();
+                                    entranceDiary = diaryProvider.diary!.first;
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => InfoDiaryScreen(
+                                              diary: entranceDiary,
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                  child: Container(
+                                    width: 180,
+                                    height: 180,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(24),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.blueGrey.withOpacity(
+                                            0.10,
+                                          ),
+                                          blurRadius: 16,
+                                          offset: Offset(0, 8),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(16),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Icon(
+                                                Icons.book,
+                                                color: Colors.blueGrey[400],
+                                              ),
+                                              SizedBox(width: 10),
+                                              Text(
+                                                'Última nota',
+                                                style: GoogleFonts.lato(
+                                                  textStyle: TextStyle(
+                                                    color: Colors.blueGrey[400],
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 6,
+                                            ),
+                                            child: Divider(
+                                              color: Colors.blueGrey[100],
+                                            ),
+                                          ),
+                                          _diary == null
+                                              ? Container(
+                                                width: 100,
+                                                height: 20,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey[300],
+                                                  borderRadius:
+                                                      BorderRadius.circular(10),
+                                                ),
+                                              )
+                                              : Text(
+                                                _diary!.title,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: GoogleFonts.lato(
+                                                  textStyle: TextStyle(
+                                                    color: Colors.blueGrey[900],
+                                                    fontWeight: FontWeight.w800,
+                                                    fontSize: 20,
+                                                  ),
+                                                ),
+                                              ),
+                                          const SizedBox(height: 6),
+                                          Flexible(
+                                            child:
+                                                _diary == null
+                                                    ? Container(
+                                                      width: 100,
+                                                      height: 20,
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.grey[300],
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                              10,
+                                                            ),
+                                                      ),
+                                                    )
+                                                    : Text(
+                                                      _diary!.description,
+                                                      maxLines: 3,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: GoogleFonts.lato(
+                                                        textStyle: TextStyle(
+                                                          color:
+                                                              Colors
+                                                                  .blueGrey[800],
+                                                          fontSize: 15,
                                                         ),
-                                                  ),
-                                                  child: Icon(
-                                                    Icons.image,
-                                                    color: Colors.blueGrey[200],
-                                                    size: 40,
-                                                  ),
-                                                )
-                                                : ClipRRect(
+                                                      ),
+                                                    ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                            // Tarjeta de Último Recuerdo
+                            Container(
+                              width: 180,
+                              height: 180,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(24),
+                                color: Color.fromRGBO(219, 225, 231, 1),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.blueGrey.withOpacity(0.10),
+                                    blurRadius: 16,
+                                    offset: Offset(0, 8),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Icon(
+                                          Icons.photo,
+                                          color: Colors.blueGrey[400],
+                                        ),
+                                        SizedBox(width: 10),
+                                        Text(
+                                          'Último recuerdo',
+                                          style: GoogleFonts.lato(
+                                            textStyle: TextStyle(
+                                              color: Colors.blueGrey[400],
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 6,
+                                      ),
+                                      child: Divider(
+                                        color: Colors.blueGrey[100],
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child:
+                                          _photo == null
+                                              ? Container(
+                                                width: double.infinity,
+                                                height: 90,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.grey[300],
+                                                  borderRadius:
+                                                      BorderRadius.circular(16),
+                                                ),
+                                                child: Icon(
+                                                  Icons.image,
+                                                  color: Colors.blueGrey[200],
+                                                  size: 40,
+                                                ),
+                                              )
+                                              : InkWell(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder:
+                                                          (
+                                                            context,
+                                                          ) => InfoPhotoScreen(
+                                                            photos:
+                                                                _photo != null
+                                                                    ? [_photo!]
+                                                                    : [],
+                                                            index: 0,
+                                                            dataPhoto: _photo!,
+                                                          ),
+                                                    ),
+                                                  );
+                                                },
+                                                child: ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(16),
                                                   child: Image.network(
@@ -378,9 +450,9 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                                                         ),
                                                   ),
                                                 ),
-                                      ),
-                                    ],
-                                  ),
+                                              ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
@@ -502,73 +574,97 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        'Mas Opciones',
-                        style: GoogleFonts.lato(
-                          textStyle: TextStyle(fontSize: 25),
+                      Center(
+                        child: Text(
+                          'Mas Opciones',
+
+                          style: GoogleFonts.lato(
+                            textStyle: TextStyle(fontSize: 25),
+                          ),
                         ),
                       ),
 
                       Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: Card(
-                          elevation: 5,
-                          child: SizedBox(
-                            width: 370,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.all(0),
-                              ),
-                              onPressed: () async {
-                                final user =
-                                    Provider.of<UserProvider>(
-                                      context,
-                                      listen: false,
-                                    ).user;
-
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder:
-                                        (context) => NotesScreen(user: user!),
+                        padding: const EdgeInsets.only(top: 20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Card(
+                              color: Colors.blueGrey,
+                              elevation: 5,
+                              child: SizedBox(
+                                width: 80,
+                                height: 80,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.all(0),
                                   ),
-                                );
-                              },
-                              child: Text(
-                                'Mis Notas',
-                                style: GoogleFonts.lato(
-                                  color: Colors.black54,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w800,
+                                  onPressed: () async {
+                                    final user =
+                                        Provider.of<UserProvider>(
+                                          context,
+                                          listen: false,
+                                        ).user;
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) =>
+                                                NotesScreen(user: user!),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Mis Notas',
+                                    style: GoogleFonts.lato(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 20),
-                        child: Card(
-                          elevation: 5,
-                          child: SizedBox(
-                            width: 370,
-                            child: TextButton(
-                              style: TextButton.styleFrom(
-                                padding: EdgeInsets.all(0),
-                              ),
-                              onPressed: () {
-                                print('Mis favoritos');
-                              },
-                              child: Text(
-                                'Favoritos',
-                                style: GoogleFonts.lato(
-                                  color: Colors.black54,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w800,
+                            Card(
+                              color: Colors.blueGrey,
+                              elevation: 5,
+                              child: SizedBox(
+                                width: 80,
+                                height: 80,
+                                child: TextButton(
+                                  style: TextButton.styleFrom(
+                                    padding: EdgeInsets.all(0),
+                                  ),
+                                  onPressed: () {
+                                    final user =
+                                        Provider.of<UserProvider>(
+                                          context,
+                                          listen: false,
+                                        ).user;
+
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder:
+                                            (context) => MyFavoriteItemsScreen(
+                                              user: user!,
+                                            ),
+                                      ),
+                                    );
+                                  },
+                                  child: Text(
+                                    'Favoritos',
+                                    style: GoogleFonts.lato(
+                                      color: Colors.white,
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.w800,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     ],

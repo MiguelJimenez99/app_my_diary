@@ -13,7 +13,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class PhotoService {
   //https://back-my-diary-v2.onrender.com
-  static String baseUrl = 'https://back-my-diary-v2.onrender.com';
+  //static String baseUrl = 'https://back-my-diary-v2.onrender.com';
+ static String baseUrl = 'http://192.168.1.42:3000';
+
 
   List<Photo> _photos = [];
 
@@ -46,7 +48,6 @@ class PhotoService {
         throw Exception('Error HTTP: ${response.statusCode}');
       }
     } catch (e) {
-      print(e);
       throw Exception('Error al obtener las fotos del usuario');
     }
   }
@@ -97,6 +98,34 @@ class PhotoService {
       }
     } catch (e) {
       throw Exception('Error al subir la foto: $e');
+    }
+  }
+
+  // funcion para actualizar estado de la foto
+
+  Future<bool> favoriteUserPhoto(String id) async {
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token');
+
+      if (token == null) {
+        throw Exception('Token invalido o vencido');
+      }
+
+      final url = Uri.parse('$baseUrl/api/user/photos/$id/favorite');
+      final response = await http.patch(
+        url,
+        headers: {'Content-Type': 'application/json', 'authorization': token},
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        return data['isFavorite'];
+      } else {
+        throw Exception('Error al actuaizar el estado: ${response.body}');
+      }
+    } catch (error) {
+      throw Exception('Error en el servidor');
     }
   }
 

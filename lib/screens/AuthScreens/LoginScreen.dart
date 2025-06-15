@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:app_my_diary/services/AuthUser.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -65,182 +66,161 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          decoration: BoxDecoration(
-            // gradient: LinearGradient(
-            //   begin: Alignment.topCenter,
-            //   end: Alignment.bottomCenter,
-            //   colors: [
-            //     Color(0xFF0F172A), // azul oscuro
-            //     Color(0xFF6D28D9), // morado
-            //   ],
-            // ),
-            color: Color.fromRGBO(27, 34, 47, 1),
-          ),
-        ),
-        SafeArea(
-          child: Center(
-            child: SizedBox(
-              width: 350,
-              height: 600,
-              child: Material(
-                // color: Color.fromRGBO(29, 36, 51, 1),
-                color: Colors.transparent,
-                borderRadius: BorderRadius.circular(30),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 20),
-                        child: Text(
-                          'My Diary V2',
-                          style: TextStyle(color: Colors.white, fontSize: 30),
-                        ),
-                      ),
-                      Text(
-                        'LOGIN',
-                        style: TextStyle(color: Colors.white, fontSize: 15),
-                      ),
-                      SizedBox(height: 30),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15.0, right: 15.0),
-                        child: Column(
-                          children: [
-                            TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'Email',
-                                labelStyle: TextStyle(color: Colors.white),
-                                prefixIcon: Icon(Icons.email_outlined),
-                                prefixIconColor: Colors.white,
-                                border: OutlineInputBorder(),
-                              ),
-                              style: TextStyle(color: Colors.white),
-                              keyboardType: TextInputType.emailAddress,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'El correo es obligatorio';
-                                }
-                                final emailRegex = RegExp(
-                                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                                );
-
-                                if (!emailRegex.hasMatch(value)) {
-                                  return 'Correo no válido';
-                                }
-                                return null;
-                              },
-                              controller: _controllerEmail,
-                            ),
-                            SizedBox(height: 20),
-                            TextFormField(
-                              decoration: InputDecoration(
-                                labelText: 'Password',
-                                labelStyle: TextStyle(color: Colors.white),
-                                prefixIcon: Icon(Icons.lock_outline),
-                                prefixIconColor: Colors.white,
-                                border: OutlineInputBorder(),
-                              ),
-                              style: TextStyle(color: Colors.white),
-                              obscureText: true,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Por favor , Ingrese la contraseña';
-                                }
-                                return null;
-                              },
-                              controller: _controllerPassword,
-                            ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Padding(
-                                padding: const EdgeInsets.only(top: 8.0),
-                                child: GestureDetector(
-                                  child: Text(
-                                    'Forgot password?',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  onTap: () {
-                                    print('Olvidaste la contraseña');
-                                  },
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      SizedBox(
-                        width: 250,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(53, 49, 149, 1),
-                          ),
-                          onPressed: actionsLogin,
-                          child: Text(
-                            'Log In',
-                            style: TextStyle(color: Colors.white, fontSize: 18),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 8.0,
-                          left: 15.0,
-                          right: 15.0,
-                          bottom: 20.0,
-                        ),
-                        child: Divider(color: Colors.white),
-                      ),
-                      Text(
-                        'Don´t have an account?',
-                        style: TextStyle(color: Colors.white, fontSize: 17),
-                      ),
-                      SizedBox(height: 20),
-                      SizedBox(
-                        width: 250,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color.fromRGBO(53, 49, 149, 1),
-                          ),
-                          onPressed: () {
-                            Navigator.pushReplacementNamed(
-                              context,
-                              '/register',
-                            );
-                          },
-                          child: Text(
-                            'Sign up',
-                            style: TextStyle(color: Colors.white, fontSize: 17),
-                          ),
-                        ),
-                      ),
-                      // GestureDetector(
-                      //   child: Text(
-                      //     'Sign up',
-                      //     style: TextStyle(
-                      //       color: Color.fromRGBO(53, 49, 149, 1),
-                      //       fontSize: 30,
-                      //     ),
-                      //   ),
-                      //   onTap: () {
-                      //   },
-                      // ),
-                    ],
+    return Scaffold(
+      backgroundColor: Color.fromRGBO(251, 248, 246, 1),
+      body: SafeArea(
+        child: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  Text(
+                    'My Diary V2',
+                    style: GoogleFonts.lato(
+                      color: Colors.blueGrey[900],
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                    ),
                   ),
-                ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'LOGIN',
+                    style: GoogleFonts.lato(
+                      color: Colors.blueGrey[700],
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Correo electrónico',
+                      labelStyle: GoogleFonts.lato(color: Colors.blueGrey),
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: Colors.blueGrey,
+                      ),
+                      filled: true,
+                      fillColor: Colors.blueGrey[50],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    style: GoogleFonts.lato(color: Colors.blueGrey[900]),
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'El correo es obligatorio';
+                      }
+                      final emailRegex = RegExp(
+                        r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                      );
+
+                      if (!emailRegex.hasMatch(value)) {
+                        return 'Correo no válido';
+                      }
+                      return null;
+                    },
+                    controller: _controllerEmail,
+                  ),
+                  const SizedBox(height: 18),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      labelText: 'Contraseña',
+                      labelStyle: GoogleFonts.lato(color: Colors.blueGrey),
+                      prefixIcon: Icon(
+                        Icons.lock_outline,
+                        color: Colors.blueGrey,
+                      ),
+                      filled: true,
+                      fillColor: Colors.blueGrey[50],
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                    style: GoogleFonts.lato(color: Colors.blueGrey[900]),
+                    obscureText: true,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Por favor , Ingrese la contraseña';
+                      }
+                      return null;
+                    },
+                    controller: _controllerPassword,
+                  ),
+                  const SizedBox(height: 28),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blueGrey,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: actionsLogin,
+                      child: Text(
+                        'Iniciar sesión',
+                        style: GoogleFonts.lato(
+                          color: Colors.white,
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Divider(color: Colors.blueGrey[200]),
+                  const SizedBox(height: 8),
+                  Text(
+                    '¿No tienes una cuenta?',
+                    style: GoogleFonts.lato(
+                      color: Colors.blueGrey[700],
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                        foregroundColor: Colors.blueGrey,
+                        side: BorderSide(color: Colors.blueGrey),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                      ),
+                      onPressed: () {
+                        Navigator.pushReplacementNamed(context, '/register');
+                      },
+                      child: Text(
+                        'Registrarse',
+                        style: GoogleFonts.lato(
+                          color: Colors.blueGrey[900],
+                          fontSize: 17,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                  if (isLoading)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24.0),
+                      child: CircularProgressIndicator(color: Colors.blueGrey),
+                    ),
+                ],
               ),
             ),
           ),
         ),
-        if (isLoading)
-          Container(
-            color: Colors.black.withOpacity(0.5), // fondo semitransparente
-            child: Center(child: CircularProgressIndicator()),
-          ),
-      ],
+      ),
     );
   }
 }
