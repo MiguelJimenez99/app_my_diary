@@ -51,7 +51,7 @@ My_Diary_V2 es una aplicación móvil desarrollada en Flutter que funciona como 
 
 1. Clona este repositorio:
    ```bash
-   git clone https://github.com/tuusuario/My_Diary_V2.git
+   git clone https://github.com/MiguelJimenez99/app_my_diary.git
    ```
 2. Abre el proyecto en tu editor de preferencia (como VS Code).
 3. Instala las dependencias:
