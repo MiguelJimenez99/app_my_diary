@@ -71,7 +71,7 @@ My_Diary_V2 es una aplicación móvil desarrollada en Flutter que funciona como 
 
 Puedes probar la aplicación descargando el archivo `.apk` directamente desde aquí:
 
-👉 [Descargar My_Diary_V2.apk](release/My_Diary_V2.apk)
+👉 [Descargar My_Diary_V2.apk](release/app-release.apk)
 
 
 ## 👤 Autor
