@@ -71,7 +71,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _registerUser() async {
     if (_formKey.currentState!.validate()) {
       if (!_dataValidate() || !_comparePassword()) return;
-
+      setState(() {
+        isLoading = true;
+      });
       try {
         final result = await authServices.registerService(
           _controllerName.text.trim(),
@@ -80,6 +82,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
           _controllerEmail.text.trim(),
           _controllerPassword.text.trim(),
         );
+
+        setState(() {
+          isLoading = false;
+        });
 
         setState(() {
           _controllerName.clear();
@@ -92,6 +98,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
         _alertMessage(result);
       } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
         _alertMessage('Error al registrar usuario: $e');
       }
     }
@@ -317,6 +326,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                     ),
                   ),
+                  if (isLoading)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24.0),
+                      child: CircularProgressIndicator(color: Colors.blueGrey),
+                    ),
                 ],
               ),
             ),
