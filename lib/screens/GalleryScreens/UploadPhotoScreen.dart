@@ -42,14 +42,15 @@ class _UploadPhotoScreenState extends State<UploadPhotoScreen> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(251, 248, 246, 1),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color.fromRGBO(251, 248, 246, 1),
         elevation: 0,
-        foregroundColor: Colors.blueGrey,
+        iconTheme: IconThemeData(color: Colors.blueGrey[900]),
         title: Text(
           'Cargar Imagen',
           style: GoogleFonts.lato(
-            color: Colors.blueGrey,
+            color: Colors.blueGrey[900],
             fontWeight: FontWeight.bold,
+            fontSize: 24,
           ),
         ),
         centerTitle: true,
@@ -60,35 +61,35 @@ class _UploadPhotoScreenState extends State<UploadPhotoScreen> {
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
             decoration: BoxDecoration(
-              color: Color.fromRGBO(210, 224, 238, 1).withOpacity(0.97),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.10),
+                  color: Colors.blueGrey.withOpacity(0.08),
                   blurRadius: 18,
                   offset: const Offset(0, 8),
                 ),
               ],
             ),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   'Cargar Imagen',
                   style: GoogleFonts.lato(
                     color: Colors.blueGrey[800],
-                    fontSize: 28,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1.1,
                   ),
                 ),
                 const SizedBox(height: 16),
-                Divider(),
+                Divider(color: Colors.blueGrey[100]),
                 Container(
-                  height: 260,
+                  height: 220,
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Colors.grey[100],
+                    color: Colors.blueGrey[50],
                     borderRadius: BorderRadius.circular(18),
                     border: Border.all(
                       color: Colors.blueGrey.shade100,
@@ -101,8 +102,8 @@ class _UploadPhotoScreenState extends State<UploadPhotoScreen> {
                             child: Text(
                               'No ha seleccionado ninguna imagen',
                               style: GoogleFonts.lato(
-                                color: Colors.blueGrey,
-                                fontSize: 17,
+                                color: Colors.blueGrey[400],
+                                fontSize: 16,
                               ),
                             ),
                           )
@@ -122,7 +123,7 @@ class _UploadPhotoScreenState extends State<UploadPhotoScreen> {
                     labelText: 'Descripción (opcional)',
                     labelStyle: GoogleFonts.lato(color: Colors.blueGrey[400]),
                     filled: true,
-                    fillColor: Colors.grey[100],
+                    fillColor: Colors.blueGrey[50],
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(16),
                       borderSide: BorderSide.none,
@@ -135,129 +136,123 @@ class _UploadPhotoScreenState extends State<UploadPhotoScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueGrey,
-                        elevation: 6,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey,
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 0,
+                          ),
                         ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 18,
-                        ),
-                      ),
-                      onPressed: galleryImage,
-                      icon: Icon(Icons.image, color: Colors.white),
-                      label: Text(
-                        'Galería',
-                        style: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontSize: 16,
+                        onPressed: galleryImage,
+                        icon: Icon(Icons.image, color: Colors.white),
+                        label: Text(
+                          'Galería',
+                          style: GoogleFonts.lato(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.blueGrey,
-                        elevation: 6,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.blueGrey,
+                          elevation: 4,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          padding: EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 0,
+                          ),
                         ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 12,
-                          horizontal: 18,
-                        ),
-                      ),
-                      onPressed: cameraImage,
-                      icon: Icon(Icons.camera_alt, color: Colors.white),
-                      label: Text(
-                        'Cámara',
-                        style: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontSize: 16,
+                        onPressed: cameraImage,
+                        icon: Icon(Icons.camera_alt, color: Colors.white),
+                        label: Text(
+                          'Cámara',
+                          style: GoogleFonts.lato(
+                            color: Colors.white,
+                            fontSize: 16,
+                          ),
                         ),
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 18),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromRGBO(53, 49, 149, 1),
-                        elevation: 8,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
-                        padding: EdgeInsets.symmetric(
-                          vertical: 14,
-                          horizontal: 24,
-                        ),
+                const SizedBox(height: 22),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blueGrey[700],
+                      elevation: 6,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      onPressed:
-                          _image == null
-                              ? null
-                              : () async {
-                                try {
-                                  await photoService.postPhotoUser(
-                                    imageFile: _image!,
-                                    description:
-                                        _controllerDescription.text.trim(),
-                                  );
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Imagen Guardada',
-                                        style: GoogleFonts.lato(
-                                          color: Colors.white,
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                      duration: Duration(seconds: 2),
-                                      backgroundColor: Color.fromRGBO(
-                                        53,
-                                        49,
-                                        149,
-                                        1,
-                                      ),
-                                    ),
-                                  );
-                                  await Future.delayed(Duration(seconds: 1));
-                                  Navigator.pop(context, true);
-                                } catch (e) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text(
-                                        'Error al guardar la imagen',
-                                        style: GoogleFonts.lato(
-                                          color: Colors.white,
-                                          fontSize: 17,
-                                        ),
-                                      ),
-                                      duration: Duration(seconds: 2),
-                                      backgroundColor: Color.fromRGBO(
-                                        53,
-                                        49,
-                                        149,
-                                        1,
-                                      ),
-                                    ),
-                                  );
-                                }
-                              },
-                      icon: Icon(Icons.upload, color: Colors.white),
-                      label: Text(
-                        'Subir',
-                        style: GoogleFonts.lato(
-                          color: Colors.white,
-                          fontSize: 17,
-                        ),
+                      padding: EdgeInsets.symmetric(
+                        vertical: 16,
+                        horizontal: 0,
                       ),
                     ),
-                  ],
+                    onPressed:
+                        _image == null
+                            ? null
+                            : () async {
+                              try {
+                                await photoService.postPhotoUser(
+                                  imageFile: _image!,
+                                  description:
+                                      _controllerDescription.text.trim(),
+                                );
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Imagen Guardada',
+                                      style: GoogleFonts.lato(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    duration: Duration(seconds: 2),
+                                    backgroundColor: Colors.blueGrey[700],
+                                  ),
+                                );
+                                await Future.delayed(Duration(seconds: 1));
+                                Navigator.pop(context, true);
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      'Error al guardar la imagen',
+                                      style: GoogleFonts.lato(
+                                        color: Colors.white,
+                                        fontSize: 17,
+                                      ),
+                                    ),
+                                    duration: Duration(seconds: 2),
+                                    backgroundColor: Colors.red,
+                                  ),
+                                );
+                              }
+                            },
+                    icon: Icon(Icons.upload, color: Colors.white),
+                    label: Text(
+                      'Subir',
+                      style: GoogleFonts.lato(
+                        color: Colors.white,
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),

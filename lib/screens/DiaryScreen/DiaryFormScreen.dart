@@ -99,14 +99,15 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
     return Scaffold(
       backgroundColor: Color.fromRGBO(251, 248, 246, 1),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Color.fromRGBO(251, 248, 246, 1),
         elevation: 0,
-        foregroundColor: Colors.blueGrey,
+        iconTheme: IconThemeData(color: Colors.blueGrey[900]),
         title: Text(
           'Nueva Entrada',
           style: GoogleFonts.lato(
-            color: Colors.blueGrey,
+            color: Colors.blueGrey[900],
             fontWeight: FontWeight.bold,
+            fontSize: 24,
           ),
         ),
         centerTitle: true,
@@ -117,11 +118,11 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
             margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
             decoration: BoxDecoration(
-              color: Color.fromRGBO(210, 224, 238, 1).withOpacity(0.97),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(24),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.10),
+                  color: Colors.blueGrey.withOpacity(0.08),
                   blurRadius: 18,
                   offset: const Offset(0, 8),
                 ),
@@ -136,32 +137,16 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
                     'Nueva Entrada',
                     style: GoogleFonts.lato(
                       color: Colors.blueGrey[800],
-                      fontSize: 28,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.1,
                     ),
                   ),
                   const SizedBox(height: 24),
-                  TextFormField(
+                  _modernTextField(
                     controller: _controllerTitle,
-                    style: GoogleFonts.lato(
-                      color: Colors.blueGrey[900],
-                      fontWeight: FontWeight.w600,
-                    ),
-                    decoration: InputDecoration(
-                      labelText: 'Título',
-                      labelStyle: GoogleFonts.lato(color: Colors.blueGrey[400]),
-                      prefixIcon: Icon(
-                        Icons.title,
-                        color: Colors.blueGrey[300],
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
+                    label: 'Título',
+                    icon: Icons.title,
                     validator:
                         (value) =>
                             value == null || value.isEmpty
@@ -169,25 +154,11 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
                                 : null,
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
+                  _modernTextField(
                     controller: _controllerDescription,
+                    label: 'Descripción',
+                    icon: Icons.description,
                     maxLines: 4,
-                    style: GoogleFonts.lato(color: Colors.blueGrey[900]),
-                    decoration: InputDecoration(
-                      labelText: 'Descripción',
-                      labelStyle: GoogleFonts.lato(color: Colors.blueGrey[400]),
-                      prefixIcon: Icon(
-                        Icons.description,
-                        color: Colors.blueGrey[300],
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      alignLabelWithHint: true,
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
                     validator:
                         (value) =>
                             value == null || value.isEmpty
@@ -195,23 +166,10 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
                                 : null,
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
+                  _modernTextField(
                     controller: _controllerMood,
-                    style: GoogleFonts.lato(color: Colors.blueGrey[900]),
-                    decoration: InputDecoration(
-                      labelText: 'Estado de ánimo',
-                      labelStyle: GoogleFonts.lato(color: Colors.blueGrey[400]),
-                      prefixIcon: Icon(
-                        Icons.emoji_emotions,
-                        color: Colors.blueGrey[300],
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
+                    label: 'Estado de ánimo',
+                    icon: Icons.emoji_emotions,
                     validator:
                         (value) =>
                             value == null || value.isEmpty
@@ -219,35 +177,19 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
                                 : null,
                   ),
                   const SizedBox(height: 16),
-                  TextFormField(
+                  _modernTextField(
                     controller: _controllerDate,
+                    label: 'Fecha',
+                    icon: Icons.calendar_today,
+                    readOnly: true,
+                    onTap: () => _selectDate(context),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return 'Por favor ingrese la fecha';
                       }
                       return null;
                     },
-                    readOnly: true,
-                    style: GoogleFonts.lato(color: Colors.blueGrey[900]),
-                    decoration: InputDecoration(
-                      labelText: "Fecha",
-                      labelStyle: GoogleFonts.lato(color: Colors.blueGrey[400]),
-                      prefixIcon: Icon(
-                        Icons.calendar_today,
-                        color: Colors.blueGrey[300],
-                      ),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(16),
-                        borderSide: BorderSide.none,
-                      ),
-                      suffixIcon: Icon(
-                        Icons.edit_calendar,
-                        color: Colors.blueGrey[300],
-                      ),
-                    ),
-                    onTap: () => _selectDate(context),
+                    suffixIcon: Icons.edit_calendar,
                   ),
                   const SizedBox(height: 28),
                   Row(
@@ -267,7 +209,10 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
                           icon: Icon(Icons.close),
                           label: Text(
                             'Cancelar',
-                            style: GoogleFonts.lato(fontSize: 16),
+                            style: GoogleFonts.lato(
+                              fontSize: 16,
+                              color: Colors.blueGrey[900],
+                            ),
                           ),
                         ),
                       ),
@@ -289,6 +234,7 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
                             style: GoogleFonts.lato(
                               fontSize: 16,
                               color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -299,6 +245,45 @@ class _DiaryFormScreenState extends State<DiaryFormScreen> {
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _modernTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    int maxLines = 1,
+    bool readOnly = false,
+    void Function()? onTap,
+    String? Function(String?)? validator,
+    IconData? suffixIcon,
+  }) {
+    return TextFormField(
+      controller: controller,
+      maxLines: maxLines,
+      readOnly: readOnly,
+      onTap: onTap,
+      validator: validator,
+      style: GoogleFonts.lato(color: Colors.blueGrey[900]),
+      decoration: InputDecoration(
+        labelText: label,
+        labelStyle: GoogleFonts.lato(color: Colors.blueGrey[700], fontSize: 16),
+        prefixIcon: Icon(icon, color: Colors.blueGrey),
+        suffixIcon:
+            suffixIcon != null
+                ? Icon(suffixIcon, color: Colors.blueGrey[300])
+                : null,
+        filled: true,
+        fillColor: Colors.blueGrey[50],
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(16),
+          borderSide: BorderSide.none,
+        ),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 16,
+          horizontal: 16,
         ),
       ),
     );
